@@ -139,151 +139,24 @@ animation: rotateMusic 10s infinite linear;
 
 /* 信紙 (42.png & 43.png 級別升級：42金絲花邊裝飾框，字體大氣，黑色文字，緊湊排版) */
 .letter-card {
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elegant Stationery Template</title>
-    <style>
-        /* Reset and Base Styles */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f2;
-            font-family: 'Playfair Display', 'Georgia', serif;
-        }
-
-        /* Outer Canvas (Simulating the abstract background splashes) */
-        .canvas {
-            position: relative;
-            width: 450px;
-            height: 650px;
-            padding: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            background: 
-                radial-gradient(circle at top right, rgba(230, 160, 160, 0.6) 0%, rgba(255,255,255,0) 45%),
-                radial-gradient(circle at bottom left, rgba(40, 95, 135, 0.7) 0%, rgba(255,255,255,0) 50%),
-                #ffffff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border-radius: 4px;
-        }
-
-        /* Inner Letter Paper */
-        .letter-paper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background-color: #faf8f5;
-            border: 1px solid rgba(184, 134, 11, 0.2);
-            padding: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Thin Inner Border Lines */
-        .inner-border-left {
-            position: absolute;
-            left: 25px;
-            top: 140px;
-            bottom: 40px;
-            width: 1px;
-            background-color: #b8860b;
-            opacity: 0.4;
-        }
-
-        .inner-border-right {
-            position: absolute;
-            right: 25px;
-            top: 40px;
-            bottom: 140px;
-            width: 1px;
-            background-color: #b8860b;
-            opacity: 0.4;
-        }
-
-        /* Ornate Corners using SVG Data URIs */
-        .corner-decor {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 100 100'%3E%3Cpath d='M10,10 C30,10 40,25 45,40 C40,30 25,25 15,35 C25,45 40,35 50,55 C45,65 30,55 20,70 C40,65 55,75 60,90' fill='none' stroke='%23b8860b' stroke-width='1.5'/%3E%3Cpath d='M10,10 C10,30 25,40 40,45 C30,40 25,25 35,15 C45,25 35,40 55,50 C65,45 55,30 70,20 C65,40 75,55 90,60' fill='none' stroke='%23b8860b' stroke-width='1.5'/%3E%3Ccircle cx='13' cy='13' r='2' fill='%23b8860b'/%3E%3C/svg%3E");
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.85;
-        }
-
-        .top-left {
-            top: 15px;
-            left: 15px;
-        }
-
-        .bottom-right {
-            bottom: 15px;
-            right: 15px;
-            transform: rotate(180deg);
-        }
-
-        /* Content Area */
-        .content {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding-top: 60px;
-        }
-
-        .content h1 {
-            font-size: 24px;
-            color: #4a3c31;
-            font-weight: 400;
-            text-align: center;
-            letter-spacing: 2px;
-        }
-
-        .content p {
-            font-size: 14px;
-            color: #5a5045;
-            line-height: 1.8;
-            text-align: justify;
-        }
-    </style>
-    <!-- Google Fonts for Elegant Typography -->
-    <link href="https://googleapis.com" rel="stylesheet">
-</head>
-<body>
-
-    <div class="canvas">
-        <div class="letter-paper">
-            <!-- Decorative Elements -->
-            <div class="inner-border-left"></div>
-            <div class="inner-border-right"></div>
-            <div class="corner-decor top-left"></div>
-            <div class="corner-decor bottom-right"></div>
-            
-            <!-- Editable Text Content -->
-            <div class="content">
-                <h1>An Invitation</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin elementum varius sodales. Mauris sit amet fermentum libero. Curabitur sed nisl eget nisl tristique hendrerit sed ac turpis.</p>
-                <p>In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Aliquam sit amet rhoncus nunc, non efficitur dolor.</p>
-            </div>
-        </div>
-    </div>
-
-</body>
-</html>
-
+  position: absolute;
+  width: 90%;
+  height: 86%;
+  left: 5%;
+  top: 7%;
+  background: #FFFDF9;
+  border-radius: 12px;
+  border: 2.5px solid #C59B27; /* 42.png 的金色實體邊框 */
+  box-shadow: inset 0 0 35px rgba(212,175,55,0.08);
+  z-index: 2; /* 位於前蓋後方 */
+  transition: transform 2.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  overflow: hidden;
 }
 
 /* 31 號天壇 logo 浮水印背景 */
@@ -1275,4 +1148,3 @@ function closeSuccessModal() {
 </script>
 </body>
 </html>
-```
