@@ -99,8 +99,8 @@ animation: rotateMusic 10s infinite linear;
 /* 典雅流線型金邊裝飾 */
 .temple-border-box {
 position: relative;
-border: 1px solid rgba(212, 175, 55, 0.3);
-background: rgba(255, 254, 250, 0.88);
+border: 1px solid rgba(212, 175, 55, 0.35);
+background: rgba(255, 254, 250, 0.94);
 backdrop-filter: blur(12px);
 -webkit-backdrop-filter: blur(12px);
 }
@@ -118,6 +118,27 @@ left: 20px;
 .temple-border-box::after {
 bottom: -10px;
 right: 20px;
+}
+
+/* 實體紙張摺痕 Crease 效果 */
+.paper-crease {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.25), transparent);
+  margin: 3.5rem 0;
+}
+.paper-crease::after {
+  content: '✦';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #D4AF37;
+  background-color: #FFFDF9;
+  padding: 0 16px;
+  font-size: 14px;
+  letter-spacing: 0.5em;
+  opacity: 0.8;
 }
 
 /* 緩慢向上移動的流暢載入動畫 */
@@ -182,8 +203,8 @@ right: 20px;
 </audio>
 </div>
 
-<!-- =================【一、高級中式實體請柬：開場信封 (完美修正 z-index 錯誤)】================= -->
-<div id="envelopeOverlay" class="fixed inset-0 z- bg-gradient-to-b from-[#1C0403] via-[#0D0101] to-[#1C0403] flex flex-col items-center justify-center overflow-hidden transition-opacity duration-[1500ms] cursor-pointer" onclick="openEnvelopeSequence()">
+<!-- =================【一、高級中式實體請柬：開場信封 (完美修正 z-index 層級錯誤，色彩無縫搭接)】================= -->
+<div id="envelopeOverlay" class="fixed inset-0 z- bg-gradient-to-b from-[#3D0A08] via-[#240504] to-[#3D0A08] flex flex-col items-center justify-center overflow-hidden transition-opacity duration-[1500ms] cursor-pointer" onclick="openEnvelopeSequence()">
   
   <!-- 金色細緻微塵慢慢飄動 -->
   <div id="envelopeParticles" class="absolute inset-0 pointer-events-none"></div>
@@ -235,61 +256,72 @@ right: 20px;
 </div>
 
 
-<!-- =================【二、正式邀請函網頁主體】================= -->
-<!-- 2. 主視覺 Banner Section -->
-<header class="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden text-center px-4">
-<div class="absolute inset-0 bg-white/20"></div>
-<div class="relative z-10 max-w-xl px-6 py-12 border border-templeGold-500/20 rounded-2xl bg-white/70 backdrop-blur-md flex flex-col items-center shadow-lg">
-<div class="text-templeGold-700 text-sm md:text-base mb-3 tracking-[0.4em] font-medium">🙏 天恩師德</div>
-<h1 class="text-5xl md:text-6xl lg:text-7xl font-normal font-brush text-templeRed-800 tracking-[0.1em] leading-snug mb-3">
-聖德壇
-</h1>
-<p class="text-2xl md:text-3xl lg:text-4xl font-normal font-brush text-bronze-800 tracking-[0.15em] mb-8">
-設壇安座大典
-</p>
-<div class="w-12 h-[1px] bg-templeGold-500 mb-6"></div>
-<p class="text-xs md:text-sm tracking-[0.3em] font-semibold text-templeGold-700 uppercase">
-誠摯邀約 • 同霑法喜
-</p>
-</div>
-</header>
+<!-- =================【二、正式邀請函網頁主體 (寬度統一，連成一封摺疊打開的信)】================= -->
+<main class="max-w-3xl mx-auto px-4 pt-12 pb-16 fade-in-slide-up">
+  
+  <!-- 連續一體化的摺疊請柬紙張 -->
+  <div class="bg-[#FFFDF9]/95 border-2 border-templeGold-500/25 rounded-2xl shadow-2xl relative overflow-hidden p-8 md:p-16">
+    
+    <!-- 1. 信件上半部：大氣主視覺 (原本的 Banner Section 融入信中) -->
+    <div class="text-center pb-4 flex flex-col items-center">
+      <div class="text-templeGold-700 text-sm md:text-base mb-4 tracking-[0.4em] font-medium">🙏 天恩師德</div>
+      <!-- 「聖德壇」：大氣繁體書法字體 -->
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-normal font-brush text-templeRed-800 tracking-[0.1em] leading-snug mb-3">
+        聖德壇
+      </h1>
+      <!-- 「設壇安座大典」：風格高度一致 -->
+      <p class="text-2xl md:text-3xl lg:text-4xl font-normal font-brush text-bronze-800 tracking-[0.15em] mb-6">
+        設壇安座大典
+      </p>
+      <div class="w-12 h-[1px] bg-templeGold-500/50 mb-4"></div>
+      <p class="text-xs md:text-sm tracking-[0.3em] font-semibold text-templeGold-700 uppercase">
+        誠摯邀約 • 同霑法喜
+      </p>
+    </div>
 
-<!-- 3. 邀請內容與緣起 Section (思源宋體 - 高級實體請柬排白) -->
-<section class="max-w-3xl mx-auto px-4 py-12 text-center">
-<div class="temple-border-box p-8 md:p-14 rounded-2xl shadow-xl">
-<div class="text-templeGold-700 text-sm mb-6 flex justify-center items-center gap-2">
-<span class="h-[1px] w-6 bg-templeGold-500/40"></span>
-<span class="tracking-[0.25em] font-semibold">天人共慶 • 凝聚善念</span>
-<span class="h-[1px] w-6 bg-templeGold-500/40"></span>
-</div>
-<p class="text-lg md:text-xl font-bold text-templeRed-800 tracking-[0.15em] mb-8">
-各位親愛的朋友，大家好：
-</p>
-<div class="space-y-6 text-bronze-800 leading-relaxed tracking-[0.15em] text-base md:text-lg font-light">
-<p>懷著感恩與喜悅的心情，和大家分享一個特別的好消息！</p>
-<p>
-經過一段時間的籌備，我們即將迎來一個溫馨的新空間 —— <strong class="text-templeRed-800 font-semibold">「聖德壇」</strong> 正式啟用。
-</p>
-<p>
-這是一個充滿祝福與感恩的時刻，也是一份值得珍惜的喜悅。
-</p>
-<p>
-誠摯邀請各位親朋好友，在這個特別的日子裡抽空前來，和我們一起見證這個美好的時刻。
-</p>
-<p>
-無論您是否曾經接觸過這樣的活動，都非常歡迎您來認識我們、聊聊天、喝杯茶，彼此交流，分享這一份喜悅。
-</p>
-<p>因為有大家的支持與祝福，這份喜悅才更加圓滿。</p>
-<p class="text-templeRed-800 font-medium">
-🌸 誠摯邀請您與家人朋友一同前來，共同聚一堂，分享喜悅，結一份美好的緣分。
-</p>
-<p class="font-medium">期待與您相聚！祝福大家平安、順心、喜樂！</p>
-</div>
-<div class="mt-8 flex justify-center">
-<i class="fa-solid fa-peace text-templeGold-600 text-xl animate-pulse"></i>
-</div>
-</div>
-</section>
+    <!-- 2. 精美實體紙張摺痕 (視覺上連起兩張信紙，呈現摺疊信件質感) -->
+    <div class="paper-crease"></div>
+
+    <!-- 3. 信件下半部：溫馨邀請內容與緣起 -->
+    <div class="text-center">
+      <div class="text-templeGold-700 text-sm mb-6 flex justify-center items-center gap-2">
+        <span class="h-[1px] w-6 bg-templeGold-500/40"></span>
+        <span class="tracking-[0.25em] font-semibold">天人共慶 • 凝聚善念</span>
+        <span class="h-[1px] w-6 bg-templeGold-500/40"></span>
+      </div>
+      
+      <p class="text-lg md:text-xl font-bold text-templeRed-800 tracking-[0.15em] mb-8">
+        各位親愛的朋友，大家好：
+      </p>
+      
+      <div class="space-y-6 text-bronze-800 leading-relaxed tracking-[0.15em] text-base md:text-lg font-light">
+        <p>懷著感恩與喜悅的心情，和大家分享一個特別的好消息！</p>
+        <p>
+          經過一段時間的籌備，我們即將迎來一個溫馨的新空間 —— <strong class="text-templeRed-800 font-semibold">「聖德壇」</strong> 正式啟用。
+        </p>
+        <p>
+          這是一個充滿祝福與感恩的時刻，也是一份值得珍惜的喜悅。
+        </p>
+        <p>
+          誠摯邀請各位親朋好友，在這個特別的日子裡抽空前來，和我們一起見證這個美好的時刻。
+        </p>
+        <p>
+          無論您是否曾經接觸過這樣的活動，都非常歡迎您來認識我們、聊聊天、喝杯茶，彼此交流，分享這一份喜悅。
+        </p>
+        <p>因為有大家的支持與祝福，這份喜悅才更加圓滿。</p>
+        <p class="text-templeRed-800 font-medium">
+          🌸 誠摯邀請您與家人朋友一同前來，共同聚一堂，分享喜悅，結一份美好的緣分。
+        </p>
+        <p class="font-medium">期待與您相聚！祝福大家平安、順心、喜樂！</p>
+      </div>
+      
+      <div class="mt-8 flex justify-center">
+        <i class="fa-solid fa-peace text-templeGold-600 text-xl animate-pulse"></i>
+      </div>
+    </div>
+
+  </div>
+</main>
 
 <!-- 4. 倒數計時 Section -->
 <section class="bg-gradient-to-r from-templeRed-900 to-templeRed-800 text-white py-12 px-4 shadow-lg">
@@ -644,7 +676,6 @@ function playMusic() {
 }
 
 function toggleMusic(event) {
-  // 阻止事件冒泡，防止觸發信封點擊
   if (event) {
     event.stopPropagation();
   }
@@ -706,6 +737,13 @@ function openEnvelopeSequence() {
 
   }, 4200);
 }
+
+// 為了方便體驗，前賢如果直接點擊遮罩任何地方，也可以一鍵觸發啟封大典
+document.getElementById("envelopeOverlay").addEventListener('click', (e) => {
+  if (e.target.id === "envelopeOverlay" || e.target.id === "envelopeParticles") {
+    openEnvelopeSequence();
+  }
+});
 
 // 5. 【流暢 requestAnimationFrame】自動向下滑動技術
 let autoScrollActive = false;
