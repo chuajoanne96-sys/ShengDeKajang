@@ -141,7 +141,7 @@ right: 20px;
 }
 .envelope-flap {
   transform-origin: top;
-  transition: transform 1.6s cubic-bezier(0.45, 0, 0.07, 1);
+  transition: transform 1.5s cubic-bezier(0.45, 0, 0.07, 1);
   z-index: 30;
 }
 .envelope-flap.opened {
@@ -152,25 +152,26 @@ right: 20px;
   transition: transform 2.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.8s ease;
 }
 .letter-card.slid-out {
-  transform: translateY(-160px) scale(1.05);
+  transform: translateY(-135px) scale(1.05);
   z-index: 40;
 }
 
 /* 緩慢旋轉的金色光暈 */
 @keyframes slowGlow {
   0%, 100% { transform: scale(1) translate(-50%, -50%); opacity: 0.4; }
-  50% { transform: scale(1.15) translate(-48%, -52%); opacity: 0.65; }
+  50% { transform: scale(1.1) translate(-48%, -52%); opacity: 0.6; }
 }
 .gold-glow-glow {
   animation: slowGlow 8s infinite ease-in-out;
 }
 </style>
 </head>
+<!-- 預設加入 overflow-hidden 鎖定滾動，等信封打開後再解除 -->
 <body class="text-bronze-800 antialiased flex flex-col min-h-screen overflow-x-hidden overflow-hidden">
 
 <!-- 1. 頂部浮動背景音樂播放器 -->
 <div class="fixed top-4 right-4 z-50">
-<button id="musicBtn" class="bg-white/90 backdrop-blur-md border border-templeGold-500/30 shadow-md text-templeGold-700 w-11 h-11 rounded-full flex items-center justify-center focus:outline-none transition-transform hover:scale-105 active:scale-95" onclick="toggleMusic()">
+<button id="musicBtn" class="bg-white/90 backdrop-blur-md border border-templeGold-500/30 shadow-md text-templeGold-700 w-11 h-11 rounded-full flex items-center justify-center focus:outline-none transition-transform hover:scale-105 active:scale-95" onclick="toggleMusic(event)">
 <i id="musicIcon" class="fa-solid fa-circle-play text-lg text-gray-400"></i>
 </button>
 <!-- 音樂播放器：卡農音樂 -->
@@ -181,8 +182,8 @@ right: 20px;
 </audio>
 </div>
 
-<!-- =================【一、高級中式實體請柬：開場信封】================= -->
-<div id="envelopeOverlay" class="fixed inset-0 z- bg-gradient-to-b from-[#1C0403] to-[#0D0101] flex flex-col items-center justify-center overflow-hidden transition-opacity duration-1500">
+<!-- =================【一、高級中式實體請柬：開場信封 (完美修正 z-index 錯誤)】================= -->
+<div id="envelopeOverlay" class="fixed inset-0 z- bg-gradient-to-b from-[#1C0403] via-[#0D0101] to-[#1C0403] flex flex-col items-center justify-center overflow-hidden transition-opacity duration-[1500ms] cursor-pointer" onclick="openEnvelopeSequence()">
   
   <!-- 金色細緻微塵慢慢飄動 -->
   <div id="envelopeParticles" class="absolute inset-0 pointer-events-none"></div>
@@ -191,34 +192,34 @@ right: 20px;
   <div class="absolute w-[450px] h-[450px] rounded-full bg-templeGold-500/5 blur-[120px] top-1/2 left-1/2 gold-glow-glow pointer-events-none"></div>
 
   <!-- 信封主體容器 -->
-  <div class="relative w-[92%] max-w-[460px] aspect-[4/3] envelope-perspective flex items-center justify-center cursor-pointer" onclick="openEnvelopeSequence()">
+  <div class="relative w-[88%] max-w-[420px] aspect-[1.4] envelope-perspective flex items-center justify-center">
     
     <!-- 1. 信封後蓋 (底層) -->
-    <div class="absolute inset-0 bg-[#2D0404] border border-[#D4AF37]/35 rounded-lg shadow-[0_25px_60px_rgba(0,0,0,0.85)] z-10 flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-[#2D0404] border border-[#D4AF37]/35 rounded-xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] z-10 flex items-center justify-center overflow-hidden">
       <!-- 雅緻的中式暗紋背景 -->
       <div class="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:16px_16px]"></div>
     </div>
 
     <!-- 2. 精美米白色邀請函信紙 (平時藏在信封內) -->
-    <div id="letterCard" class="absolute w-[92%] h-[92%] bg-[#FAF6F0] rounded-md shadow-inner z-20 letter-card flex flex-col items-center justify-center p-6 text-center border border-[#FAF6F0]">
+    <div id="letterCard" class="absolute w-[92%] h-[92%] bg-[#FAF6F0] rounded-lg shadow-inner z-20 letter-card flex flex-col items-center justify-center p-6 text-center border border-[#FAF6F0]/60">
       <span class="text-templeGold-700 text-xs tracking-[0.3em] mb-2">🙏 天恩師德</span>
       <h3 class="text-3xl font-normal font-brush text-templeRed-800 tracking-[0.15em] mb-1">聖德壇</h3>
-      <p class="text-sm text-bronze-800 tracking-[0.2em]">設壇安座大典誠摯邀約</p>
+      <p class="text-xs text-bronze-800 tracking-[0.2em]">設壇安座大典誠摯邀約</p>
       <div class="w-8 h-[1px] bg-templeGold-500/50 my-3"></div>
       <p class="text-[10px] text-gray-400 tracking-[0.1em] font-serif">席位有限 • 敬祈預先登記</p>
     </div>
 
     <!-- 3. 信封左右折翼與下折翼 (呈現前封套立體層次) -->
-    <div class="absolute inset-0 bg-transparent z-25 rounded-lg pointer-events-none" style="box-shadow: inset 0 -30px 40px rgba(0,0,0,0.4), inset -20px 0 30px rgba(0,0,0,0.3), inset 20px 0 30px rgba(0,0,0,0.3);"></div>
+    <div class="absolute inset-0 bg-transparent z-25 rounded-xl pointer-events-none" style="box-shadow: inset 0 -30px 40px rgba(0,0,0,0.4), inset -20px 0 30px rgba(0,0,0,0.3), inset 20px 0 30px rgba(0,0,0,0.3);"></div>
 
     <!-- 4. 信封上蓋 (3D 翻開動畫) -->
-    <div id="envelopeFlap" class="absolute top-0 left-0 w-full h-1/2 bg-[#3A0707] border-t border-l border-r border-[#D4AF37]/30 rounded-t-lg envelope-flap shadow-[0_4px_10px_rgba(0,0,0,0.3)] z-30">
+    <div id="envelopeFlap" class="absolute top-0 left-0 w-full h-1/2 bg-[#3A0707] border-t border-l border-r border-[#D4AF37]/30 rounded-t-xl envelope-flap shadow-[0_4px_10px_rgba(0,0,0,0.3)] z-30">
       <!-- 上蓋金絲三角拉邊裝飾 -->
-      <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[230px] border-l-transparent border-r-[230px] border-r-transparent border-b-[20px] border-b-[#2D0404]"></div>
+      <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[210px] border-l-transparent border-r-[210px] border-r-transparent border-b-[20px] border-b-[#2D0404]"></div>
     </div>
 
     <!-- 5. 頂級金黃火漆印章 (置中) -->
-    <div id="waxSeal" class="absolute z-40 w-16 h-16 rounded-full bg-gradient-to-br from-[#E6C662] via-[#C59B27] to-[#8C6B13] border border-[#F3EAD8]/40 shadow-[0_10px_25px_rgba(0,0,0,0.6),_inset_0_2px_5px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all duration-1000 transform hover:scale-105 active:scale-95">
+    <div id="waxSeal" class="absolute z-40 w-16 h-16 rounded-full bg-gradient-to-br from-[#E6C662] via-[#C59B27] to-[#8C6B13] border border-[#F3EAD8]/40 shadow-[0_10px_25px_rgba(0,0,0,0.6),_inset_0_2px_5px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all duration-1000 transform -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2">
       <!-- 火漆內圈凹槽 -->
       <div class="w-12 h-12 rounded-full border border-[#8C6B13]/30 flex items-center justify-center shadow-inner">
         <span class="text-white text-xl drop-shadow-[0_2px_3px_rgba(0,0,0,0.5)] animate-pulse">✦</span>
@@ -228,8 +229,8 @@ right: 20px;
   </div>
 
   <!-- 指引文字 -->
-  <p id="openHint" class="text-templeGold-100/60 font-serif text-sm tracking-[0.3em] mt-10 animate-pulse transition-opacity duration-1000">
-    ✦ 指尖輕點 • 啟封佳音 ✦
+  <p id="openHint" class="text-templeGold-100/70 font-serif text-sm tracking-[0.3em] mt-12 animate-pulse transition-opacity duration-1000">
+    ✦ 輕觸螢幕 • 啟封佳音 ✦
   </p>
 </div>
 
@@ -580,7 +581,7 @@ document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-// 2. 粒子系統：生成緩慢飄動的金色粒子（信封開場與最後一幕專用）
+// 2. 粒子系統：生成緩慢飄動的金色粒子
 function createGoldParticles(containerId, count) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -588,12 +589,10 @@ function createGoldParticles(containerId, count) {
     const particle = document.createElement('div');
     particle.className = 'absolute bg-gradient-to-r from-[#FFEFA6] to-[#D4AF37] rounded-full pointer-events-none opacity-0';
     
-    // 隨機大小、位置、速度與不透明度
     const size = Math.random() * 3 + 1.2; 
     const startX = Math.random() * 100;
     const startY = Math.random() * 100;
-    const duration = Math.random() * 8000 + 7000; // 7 到 15 秒一趟，極其緩慢
-    const delay = Math.random() * -8000; // 錯開起步時間
+    const duration = Math.random() * 8000 + 7000; 
     
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
@@ -601,13 +600,11 @@ function createGoldParticles(containerId, count) {
     particle.style.top = `${startY}%`;
     particle.style.opacity = Math.random() * 0.4 + 0.1;
     
-    // 注入緩緩向上飄逸且微微左右晃動的動畫
     particle.style.transition = `transform ${duration}ms linear, opacity ${duration}ms ease-in-out`;
     particle.style.transform = `translateY(${Math.random() * -80 - 40}px) translateX(${Math.random() * 30 - 15}px)`;
     
     container.appendChild(particle);
 
-    // 循環生成緩慢動畫效果
     setInterval(() => {
       particle.style.transition = 'none';
       particle.style.left = `${Math.random() * 100}%`;
@@ -646,7 +643,11 @@ function playMusic() {
   });
 }
 
-function toggleMusic() {
+function toggleMusic(event) {
+  // 阻止事件冒泡，防止觸發信封點擊
+  if (event) {
+    event.stopPropagation();
+  }
   if (isPlaying) {
     bgMusic.pause();
     musicIcon.classList.remove("rotating-music");
@@ -666,7 +667,7 @@ function openEnvelopeSequence() {
   if (isEnvelopeOpened) return;
   isEnvelopeOpened = true;
 
-  // 1. 同步啟動背景音樂（極致流暢突破 iOS 安全限制）
+  // 1. 同步啟動背景音樂
   playMusic();
 
   // 2. 指引文字立即隱藏
@@ -674,23 +675,19 @@ function openEnvelopeSequence() {
 
   // 3. 火漆印章微微閃爍並淡出
   const wax = document.getElementById("waxSeal");
-  wax.style.transform = "scale(1.25)";
-  wax.style.boxShadow = "0 0 35px rgba(212, 175, 55, 0.9)";
-  
-  setTimeout(() => {
-    wax.style.opacity = "0";
-    wax.style.pointerEvents = "none";
-  }, 750);
+  wax.style.transform = "translate(-50%, -50%) scale(1.35)";
+  wax.style.boxShadow = "0 0 45px rgba(212, 175, 55, 0.95)";
+  wax.style.opacity = "0";
 
   // 4. 信封上蓋慢慢 3D 翻開
   setTimeout(() => {
     document.getElementById("envelopeFlap").classList.add("opened");
-  }, 1100);
+  }, 900);
 
   // 5. 邀請函信紙緩緩向上浮現
   setTimeout(() => {
     document.getElementById("letterCard").classList.add("slid-out");
-  }, 2200);
+  }, 2000);
 
   // 6. 整封邀請函淡入主體並移除遮罩，進入網頁主畫面
   setTimeout(() => {
@@ -702,20 +699,13 @@ function openEnvelopeSequence() {
     // 允許主體網頁自由滾動
     document.body.classList.remove("overflow-hidden");
 
-    // 7. 【精品網頁自動緩緩平順向上滑動】（1.5秒後優雅啟動）
+    // 7. 【精品網頁自動緩緩平順向上滑動】
     setTimeout(() => {
       startElegantAutoScroll();
     }, 1500);
 
-  }, 4500);
+  }, 4200);
 }
-
-// 為了方便體驗，前賢如果直接點擊遮罩任何地方，也可以一鍵觸發啟封大典
-document.getElementById("envelopeOverlay").addEventListener('click', (e) => {
-  if (e.target.id === "envelopeOverlay" || e.target.id === "envelopeParticles") {
-    openEnvelopeSequence();
-  }
-});
 
 // 5. 【流暢 requestAnimationFrame】自動向下滑動技術
 let autoScrollActive = false;
@@ -727,7 +717,7 @@ function startElegantAutoScroll() {
   autoScrollActive = true;
   lastScrollY = window.scrollY;
 
-  // 點對點極緩慢移動步長（0.38 像素，確保極致緩慢、電影感）
+  // 點對點極緩慢移動步長（0.38 像素，確保極致緩慢、舒適）
   const speedStep = 0.38; 
 
   function performScroll() {
@@ -770,7 +760,7 @@ userControls.forEach(event => {
   window.addEventListener(event, stopElegantAutoScroll, { passive: true });
 });
 
-// 監聽滾動差值（若滾動距離不等於自動位移，代表前賢在使用手指或滾輪）
+// 監聽滾動差值
 window.addEventListener('scroll', () => {
   if (autoScrollActive) {
     if (Math.abs(window.scrollY - lastScrollY) > 2) {
@@ -780,7 +770,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 
-// 6. 大人與小孩人數加減控制 [3-5]
+// 6. 大人與小孩人數加減控制
 let adults = 1; 
 let children = 0; 
 
@@ -794,7 +784,7 @@ function changeCount(type, delta) {
   }
 }
 
-// 7. 報名資料收集、儲存至 Google 試算表 [2, 6, 7]
+// 7. 報名資料收集、儲存至 Google 試算表
 function submitRSVP() {
   const name = document.getElementById("rsvpName").value.trim();
   const phone = document.getElementById("rsvpPhone").value.trim();
@@ -805,7 +795,7 @@ function submitRSVP() {
     return;
   }
 
-  // ----------------【同步傳送資料至 Google Sheet】---------------- [2]
+  // ----------------【同步傳送資料至 Google Sheet】----------------
   const googleAppScriptUrl = "https://script.google.com/macros/s/AKfycbzIrfoFz5TGrvM8l-ePcqVWUQ6Yfy-Eorjsvo8yQL_-KMXsSKmwY3fhP2nNHn4dvGx2/exec"; 
   
   const formData = new FormData();
@@ -815,7 +805,7 @@ function submitRSVP() {
   formData.append("adults", adults);   
   formData.append("children", children); 
 
-  // 背景傳送資料 [7]
+  // 背景傳送資料
   fetch(googleAppScriptUrl, {
     method: "POST",
     body: formData,
@@ -831,7 +821,7 @@ function submitRSVP() {
   });
 }
 
-// 彈窗控制 [7, 8]
+// 彈窗控制
 function showSuccessModal() {
   const modal = document.getElementById("successModal");
   modal.style.display = "flex";
@@ -840,7 +830,7 @@ function showSuccessModal() {
 function closeSuccessModal() {
   const modal = document.getElementById("successModal");
   modal.style.display = "none";
-  // 重置表單與人數 [8]
+  // 重置表單與人數
   document.getElementById("rsvpForm").reset();
   adults = 1;
   children = 0;
