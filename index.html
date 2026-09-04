@@ -137,7 +137,7 @@ animation: rotateMusic 10s infinite linear;
   background-size: 16px 16px;
 }
 
-/* 信紙 (初始隱藏於信封內部，z-index: 2) */
+/* 信紙 (31、32 號美學：包含金色天壇浮水印背景，紅藍經典配色，去雜字) */
 .letter-card {
   position: absolute;
   width: 90%;
@@ -156,14 +156,29 @@ animation: rotateMusic 10s infinite linear;
   justify-content: center;
   padding: 1.5rem;
   text-align: center;
+  overflow: hidden;
 }
+
+/* 31 號天壇 logo 浮水印背景 */
+.temple-watermark {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  top: 15%;
+  left: 15%;
+  opacity: 0.08; /* 極致優雅的高透光浮水印 */
+  pointer-events: none;
+  color: #D4AF37;
+  z-index: 1;
+}
+
 /* 打開時，信紙向上浮現並升至最頂層 (z-index: 10) */
 .letter-card.slid-out {
   transform: translateY(-55%) scale(1.06);
   z-index: 10;
 }
 
-/* 前蓋折翼：左、右、下 (z-index: 4, 5) 完美合攏，將信紙嚴密包裹 */
+/* 前蓋折翼：左、右、下 (z-index: 4, 5) 完美合攏 */
 .flap-left {
   position: absolute;
   left: 0;
@@ -242,21 +257,23 @@ animation: rotateMusic 10s infinite linear;
   transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* =================【二、主頁：高級古法宣紙金絲卡片質感與中式燙金回紋邊框】================= */
+/* =================【二、主頁：38 號高端手作宣紙與雙向水彩墨暈質感】================= */
 .premium-paper-card {
-  background-color: #FAF5EB; /* 溫潤宣紙暖米色 */
-  /* 宣紙微細棉質與金絲纖維紋理模擬 */
+  background-color: #FCFAF2; /* 奢華溫潤象牙色 */
+  /* 融合微細棉絮紋、橫向竹簾壓紋、以及頂級雙向墨暈與雙層拉絲金邊 */
   background-image: 
-    radial-gradient(rgba(212, 175, 55, 0.035) 1px, transparent 0),
-    linear-gradient(to right, rgba(212, 175, 55, 0.012) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(212, 175, 55, 0.012) 1px, transparent 1px);
-  background-size: 36px 36px, 8px 8px, 8px 8px;
+    /* 1. 橫向古法竹簾壓線 */
+    repeating-linear-gradient(to bottom, rgba(0,0,0,0.012) 0px, rgba(0,0,0,0.012) 1px, transparent 1px, transparent 3px),
+    /* 2. 右上方：暖香檳玫瑰金墨暈 (38 號靈魂) */
+    radial-gradient(circle at 90% 8%, rgba(226, 188, 164, 0.22) 0%, rgba(212, 175, 55, 0.08) 40%, transparent 70%),
+    /* 3. 左下方：深海藍金潑墨水彩暈染 (38 號靈魂) */
+    radial-gradient(circle at 10% 92%, rgba(30, 77, 96, 0.16) 0%, rgba(212, 175, 55, 0.06) 45%, transparent 75%);
   position: relative;
-  border: 2px solid #C59B27; /* 實體燙金邊框 */
+  border: 2.5px solid rgba(212, 175, 55, 0.5); /* 實體燙金大邊框 */
   box-shadow: 
-    0 15px 40px rgba(139, 30, 26, 0.08),
-    0 45px 90px rgba(0, 0, 0, 0.25),
-    inset 0 0 55px rgba(212, 175, 55, 0.12); /* 溫潤的紙內金色光暈 */
+    0 15px 40px rgba(139, 30, 26, 0.06),
+    0 45px 95px rgba(0, 0, 0, 0.22),
+    inset 0 0 50px rgba(212, 175, 55, 0.08); /* 內斂尊貴紙張金光 */
 }
 
 /* 摺紙中式摺痕 */
@@ -273,7 +290,7 @@ animation: rotateMusic 10s infinite linear;
   top: 50%;
   transform: translate(-50%, -50%);
   color: #D4AF37;
-  background-color: #FAF5EB;
+  background-color: #FCFAF2;
   padding: 0 16px;
   font-size: 14px;
   letter-spacing: 0.5em;
@@ -319,7 +336,7 @@ animation: rotateMusic 10s infinite linear;
 <!-- 電影級黃金閃光過渡層 -->
 <div id="goldFlash"></div>
 
-<!-- =================【一、開場信封：皇家級 3D 摺疊信封 (100% 解決 28 號截圖層級重疊與無法點擊問題)】================= -->
+<!-- =================【一、開場信封：皇家級 3D 摺疊信封 (全新解決 31 & 32 號截圖美學，無重合一鍵啟封)】================= -->
 <div id="envelopeOverlay" class="cursor-pointer" onclick="openEnvelopeSequence()">
   
   <!-- 金色細緻微塵慢慢飄動 -->
@@ -336,22 +353,42 @@ animation: rotateMusic 10s infinite linear;
       <div class="envelope-pattern"></div>
     </div>
 
-    <!-- 2. 精美信紙 (收納於信封內，點擊後才會浮現升起，z-index: 2) -->
+    <!-- 2. 精美信紙 (31、32 號黃金排版：金天壇浮水印，大氣字號與硃砂紅、青花藍配色) -->
     <div id="letterCard" class="letter-card">
-      <span class="text-templeGold-700 text-[10px] tracking-[0.3em] mb-1">🙏 天恩師德</span>
       
-      <!-- 經典小金色蓮花圖騰 -->
-      <svg class="w-8 h-8 text-templeGold-500 my-1.5" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12,2C11.5,4 10,5 8.5,6C9.5,7 11,7.5 12,9C13,7.5 14.5,7 15.5,6C14,5 12.5,4 12,2M12,10C10,11.5 8,11.5 6,11C7.5,12.5 9.5,13 12,13C14.5,13 16.5,12.5 18,11C16,11.5 14,11.5 12,10M12,14C9,15.5 6,15.5 3.5,15C5.5,16.5 8.5,17 12,17C15.5,17 18.5,16.5 20.5,15C18,15.5 15,15.5 12,14M12,18C10,19.5 7,19.5 4,19C6,20.5 9,21 12,21C15,21 18,20.5 20,19C17,19.5 14,19.5 12,18Z"/>
-      </svg>
-
-      <h3 class="text-2.5xl font-normal font-brush text-templeRed-800 tracking-[0.15em] mb-0.5">聖德壇</h3>
-      <p class="text-[10px] text-bronze-800 tracking-[0.2em]">設壇安座大典誠摯邀約</p>
-      <div class="w-6 h-[0.5px] bg-[#D4AF37]/40 my-2"></div>
-      <p class="text-[9px] text-gray-400 tracking-[0.1em] font-serif">席位有限 • 敬祈預先登記</p>
+      <!-- 31 號：天壇 logo 作為背景浮水印 -->
+      <div class="temple-watermark">
+        <svg viewBox="0 0 100 100" class="w-full h-full" fill="currentColor">
+          <path d="M50,15 L50,10 M50,8 cx50 cy8 r1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M42,22 C45,18 55,18 58,22 L50,15 Z" />
+          <path d="M35,32 C40,25 60,25 65,32 L58,22 L42,22 Z" />
+          <path d="M25,48 C35,38 65,38 75,48 L65,32 L35,32 Z" />
+          <path d="M15,68 C30,55 70,55 85,68 L75,48 L25,48 Z" />
+          <path d="M30,68 L30,85 L70,85 L70,68 Z" opacity="0.85"/>
+          <path d="M20,85 L80,85 L75,92 L25,92 Z" opacity="0.9"/>
+          <path d="M10,92 C25,88 75,88 90,92 C80,98 20,98 10,92 Z" />
+        </svg>
+      </div>
+      
+      <!-- 32 號：大氣字體與配色排版 -->
+      <div class="relative z-10 flex flex-col items-center justify-center w-full h-full">
+        <!-- 聖德壇：極致放大 (佔用原 logo 的 size) -->
+        <h3 class="text-4.5xl md:text-5xl font-normal font-brush text-[#8B1E1A] tracking-[0.22em] mb-3 drop-shadow-[0_1px_2px_rgba(139,30,26,0.15)]">
+          聖德壇
+        </h3>
+        <!-- 硃砂紅配色 -->
+        <p class="text-xs md:text-sm font-semibold text-[#8B1E1A] tracking-[0.25em] mb-4">
+          設壇安座大典誠摯邀約
+        </p>
+        <div class="w-8 h-[0.5px] bg-[#D4AF37]/45 mb-4"></div>
+        <!-- 尊貴青花藍配色 -->
+        <p class="text-[10px] md:text-xs font-bold text-[#1E4D60] tracking-[0.18em]">
+          席位有限 • 敬祈預先登記
+        </p>
+      </div>
     </div>
 
-    <!-- 3. 信封前蓋折翼 (左、右、下) 位於信紙前方，合攏擋住信紙 -->
+    <!-- 3. 信封前蓋折翼 (左、右、下) -->
     <div class="flap-left"></div>
     <div class="flap-right"></div>
     <div class="flap-bottom"></div>
@@ -378,59 +415,86 @@ animation: rotateMusic 10s infinite linear;
 </div>
 
 
-<!-- =================【二、主頁：正式邀請函網頁主體 (完美修復 26 & 27 號畫面，增補排版與金邊宣紙卡)】================= -->
+<!-- =================【二、主頁：正式邀請函網頁主體 (35 號全新配色框架 ＋ 38 號宣紙潑墨金絲卡紙)】================= -->
 <main class="max-w-3xl mx-auto px-4 pt-12 pb-16 fade-in-slide-up">
   
-  <!-- 高級古法宣紙卡片請柬本體 -->
+  <!-- 高級古法宣紙卡片請柬本體 (極致還原 38 號高端紙張工藝) -->
   <div class="premium-paper-card rounded-3xl p-8 md:p-16 relative">
     
+    <!-- 1. 38 號：頂級金絲角邊與燙金雙重花邊框 (解決空洞) -->
+    <!-- 頂部與底部精緻的對稱古典金邊雕花 (SVG 渲染) -->
+    <div class="absolute top-4 left-4 w-28 h-28 text-[#C59B27]/40 pointer-events-none">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M10,10 C25,10 45,15 50,30 C35,30 25,20 10,10 Z" fill="currentColor" fill-opacity="0.05"/>
+        <path d="M10,10 C10,25 15,45 30,50 C30,35 20,25 10,10 Z" fill="currentColor" fill-opacity="0.05"/>
+        <path d="M12,12 Q40,20 45,45 M12,12 Q20,40 45,45" stroke-width="0.8"/>
+        <path d="M15,15 C45,10 65,25 70,35 Q55,40 40,20" stroke-width="1"/>
+        <path d="M15,15 C10,45 25,65 35,70 Q40,55 20,40" stroke-width="1"/>
+        <path d="M8,8 L8,85 L85,85" stroke-dasharray="3,3" stroke-width="0.5" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="absolute bottom-4 right-4 w-28 h-28 text-[#C59B27]/40 pointer-events-none transform rotate-180">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M10,10 C25,10 45,15 50,30 C35,30 25,20 10,10 Z" fill="currentColor" fill-opacity="0.05"/>
+        <path d="M10,10 C10,25 15,45 30,50 C30,35 20,25 10,10 Z" fill="currentColor" fill-opacity="0.05"/>
+        <path d="M12,12 Q40,20 45,45 M12,12 Q20,40 45,45" stroke-width="0.8"/>
+        <path d="M15,15 C45,10 65,25 70,35 Q55,40 40,20" stroke-width="1"/>
+        <path d="M15,15 C10,45 25,65 35,70 Q40,55 20,40" stroke-width="1"/>
+        <path d="M8,8 L8,85 L85,85" stroke-dasharray="3,3" stroke-width="0.5" opacity="0.4"/>
+      </svg>
+    </div>
+
     <!-- 中式雙層燙金回紋內邊框 -->
-    <div class="absolute inset-3 md:inset-5 border-2 border-[#D4AF37]/40 rounded-2xl pointer-events-none"></div>
-    <div class="absolute inset-4 md:inset-6 border border-[#D4AF37]/15 rounded-2xl pointer-events-none"></div>
-    
-    <!-- 邊角精緻古典金邊花紋裝飾 (解決空洞) -->
-    <div class="absolute top-8 left-8 text-templeGold-600/35 text-sm pointer-events-none">✦</div>
-    <div class="absolute top-8 right-8 text-templeGold-600/35 text-sm pointer-events-none">✦</div>
-    <div class="absolute bottom-8 left-8 text-templeGold-600/35 text-sm pointer-events-none">✦</div>
-    <div class="absolute bottom-8 right-8 text-templeGold-600/35 text-sm pointer-events-none">✦</div>
+    <div class="absolute inset-3 md:inset-5 border-2 border-[#D4AF37]/35 rounded-2xl pointer-events-none"></div>
+    <div class="absolute inset-4 md:inset-6 border border-[#D4AF37]/10 rounded-2xl pointer-events-none"></div>
 
     <div class="relative z-10">
-      <!-- 1. 信件上半部：大氣主視覺 Banner (豐富古典排版，完美解決 27 太空空洞) -->
+      <!-- 2. 信件上半部：大氣主視覺 Banner (35 號全新大氣配色框架) -->
       <div class="text-center pb-4 flex flex-col items-center">
         
-        <!-- 頂部精緻金蓮與祥雲 -->
-        <div class="flex items-center gap-3 mb-6 text-templeGold-600/80">
-          <span class="text-base">🏮</span>
-          <span class="tracking-[0.4em] font-medium text-xs md:text-sm">🙏 天恩師德</span>
-          <span class="text-base">🏮</span>
+        <!-- 💜 紫色框：🙏 天恩師德 (兩側帶有發光大紅燈籠) -->
+        <div class="flex items-center gap-3 mb-6 text-[#7B1FA2] font-semibold drop-shadow-[0_1px_2px_rgba(123,31,162,0.12)]">
+          <span class="text-xl animate-pulse">🏮</span>
+          <span class="tracking-[0.4em] font-medium text-sm md:text-base">🙏 天恩師德</span>
+          <span class="text-xl animate-pulse">🏮</span>
         </div>
         
-        <!-- 聖德壇 (毛筆字) -->
-        <h1 class="text-5.5xl md:text-6.5xl lg:text-7.5xl font-normal font-brush text-templeRed-800 tracking-[0.12em] leading-snug mb-2 drop-shadow-[0_2px_3px_rgba(139,30,26,0.1)]">
+        <!-- 💙 藍色框：聖德壇 (尊貴深海藍，雄渾厚重) -->
+        <h1 class="text-6.5xl md:text-7.5xl lg:text-8.5xl font-normal font-brush text-[#0D47A1] tracking-[0.12em] leading-snug mb-1 drop-shadow-[0_2px_3px_rgba(13,71,161,0.12)] animate-pulse">
           聖德壇
         </h1>
         
-        <!-- 設壇安座大典 (毛筆字) -->
-        <p class="text-2.5xl md:text-3.5xl lg:text-4.5xl font-normal font-brush text-bronze-800 tracking-[0.15em] mb-6">
+        <!-- 🧡 橙色框：設壇安座大典 (古典尊崇橙) -->
+        <p class="text-3.5xl md:text-4.5xl lg:text-5.5xl font-normal font-brush text-[#E65100] tracking-[0.16em] mb-8">
           設壇安座大典
         </p>
 
-        <!-- 【全新古典中式框架】完美充實畫面，彰顯莊嚴儀式感 -->
-        <div class="border-y border-[#D4AF37]/25 py-4 my-2 w-[90%] max-w-md text-center text-xs md:text-sm text-templeGold-700 space-y-1.5 tracking-[0.2em] font-medium bg-[#FAF6F0]/50 rounded-lg">
-          <p>謹詹於 公元二零二六年九月十六日</p>
-          <p class="text-[11px] opacity-85">歲次丙午年 八月初六日</p>
-          <p class="text-[#8B1E1A] font-semibold">恭迎仙佛聖駕 • 設壇安座大典</p>
+        <!-- 【35 號多色中式古典框架】完美充實畫面，彰顯儀式感 -->
+        <div class="border-y border-[#D4AF37]/25 py-4 my-2 w-[92%] max-w-md text-center text-xs md:text-sm space-y-2 bg-[#FAF6F0]/40 rounded-xl">
+          <!-- 💛 黃色框：謹詹於 公元二零二六年九月十六日 (御用黃金/古金色) -->
+          <p class="text-[#B8860B] font-bold tracking-[0.2em]">
+            謹詹於 公元二零二六年九月十六日
+          </p>
+          <!-- 🤎 褐色框：歲次丙午年 八月初六日 (古典銅褐色) -->
+          <p class="text-[#5D4037] text-[11px] md:text-xs font-semibold tracking-[0.18em]">
+            歲次丙午年 八月初六日
+          </p>
+          <hr class="border-[#D4AF37]/15 my-1.5 w-1/2 mx-auto">
+          <p class="text-[#8B1E1A] font-bold tracking-[0.2em] text-[12px] md:text-sm">
+            恭迎仙佛聖駕 • 設壇安座大典
+          </p>
         </div>
 
-        <p class="text-[11px] md:text-xs tracking-[0.3em] font-semibold text-templeGold-700 uppercase mt-4">
+        <!-- 🖤 灰色框：誠摯邀約 • 同霑法喜 (典雅青石灰) -->
+        <p class="text-[12px] md:text-xs tracking-[0.35em] font-bold text-[#546E7A] uppercase mt-6">
           誠摯邀約 • 同霑法喜
         </p>
       </div>
 
-      <!-- 2. 精美實體紙張摺痕 (連續摺紙打開效果) -->
+      <!-- 3. 精美實體紙張摺痕 (連續摺紙打開效果) -->
       <div class="paper-crease"></div>
 
-      <!-- 3. 信件下半部：溫馨邀請內容與緣起 -->
+      <!-- 4. 信件下半部：溫馨邀請內容與緣起 -->
       <div class="text-center">
         <div class="text-templeGold-700 text-sm mb-6 flex justify-center items-center gap-2">
           <span class="h-[1px] w-6 bg-templeGold-500/40"></span>
@@ -903,6 +967,13 @@ function openEnvelopeSequence() {
 
   }, 3600); // 動畫銜接點
 }
+
+// 為了方便體驗，前賢如果直接點擊遮罩任何地方，也可以一鍵觸發啟封大典
+document.getElementById("envelopeOverlay").addEventListener('click', (e) => {
+  if (e.target.id === "envelopeOverlay" || e.target.id === "envelopeParticles") {
+    openEnvelopeSequence();
+  }
+});
 
 // 5. 【流暢 requestAnimationFrame】自動向下滑動技術
 let autoScrollActive = false;
