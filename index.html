@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>電子簽到 · 祝福便籤</title>
-  <!-- 字型與樣式 -->
+  <title>聖德安座設壇 · 電子簽到</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -17,720 +16,997 @@
 
     body {
       font-family: 'Quicksand', sans-serif;
-      background: #f7f5f0;
-      color: #2e3b2e;
+      background: #050805;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-
-    /* 主容器：模擬手機/平板頁面 */
-    .app-container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* 簽到頁面 (scan 後彈出) */
-    .signin-card {
-      background: #ffffffd9;
-      backdrop-filter: blur(10px);
-      border-radius: 48px;
-      padding: 32px 24px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.06);
-      border: 1px solid #e9e3d8;
-      transition: all 0.3s ease;
-    }
-
-    .signin-title {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #3b5e3b;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .signin-sub {
-      font-size: 0.95rem;
-      color: #7a8f7a;
-      margin-bottom: 28px;
-      font-weight: 500;
-    }
-
-    .input-group {
-      margin-bottom: 24px;
-    }
-
-    .input-group label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: #4f6b4f;
-      margin-bottom: 8px;
-      letter-spacing: 0.3px;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 16px 20px;
-      border: 2px solid #dad3c9;
-      border-radius: 40px;
-      font-size: 1rem;
-      font-family: 'Quicksand', sans-serif;
-      background: #ffffff;
-      transition: all 0.2s;
-      outline: none;
-      color: #2e3b2e;
-    }
-
-    .input-group input:focus {
-      border-color: #7fa87f;
-      box-shadow: 0 0 0 4px rgba(127, 168, 127, 0.15);
-    }
-
-    /* 便籤圖案選擇 */
-    .sticky-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 6px;
-      margin-bottom: 28px;
-    }
-
-    .sticky-option {
-      flex: 1 0 70px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 16px 6px;
-      background: #fefcf8;
-      border: 2px solid #e3dbd0;
-      border-radius: 28px;
-      font-size: 2rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      user-select: none;
-      color: #586e58;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-      line-height: 1;
-    }
-
-    .sticky-option span {
-      font-size: 0.75rem;
-      margin-top: 6px;
-      font-weight: 600;
-      color: #6e7e6e;
-      letter-spacing: 0.3px;
-    }
-
-    .sticky-option.selected {
-      border-color: #6b8f6b;
-      background: #ecf3ec;
-      box-shadow: 0 0 0 4px rgba(107, 143, 107, 0.15);
-      transform: scale(1.02);
-    }
-
-    .sticky-option:hover {
-      background: #f5f1ea;
-      border-color: #b8b0a4;
-    }
-
-    /* 按鈕 */
-    .btn {
-      border: none;
-      background: #3f6840;
-      color: white;
-      padding: 18px 24px;
-      border-radius: 60px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      font-family: 'Quicksand', sans-serif;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      transition: all 0.2s;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 12px 24px -8px rgba(63, 104, 64, 0.3);
-    }
-
-    .btn:hover {
-      background: #2f5230;
-      transform: translateY(-2px);
-      box-shadow: 0 16px 28px -8px rgba(63, 104, 64, 0.4);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-      box-shadow: 0 6px 14px -4px rgba(63, 104, 64, 0.3);
-    }
-
-    /* 祝福看板頁面 */
-    .dashboard {
-      display: none; /* 預設隱藏，簽到後顯示 */
-      width: 100%;
-      background: #ffffffd9;
-      backdrop-filter: blur(10px);
-      border-radius: 48px;
-      padding: 28px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e9e3d8;
-      gap: 24px;
-      flex-direction: row;
-      min-height: 80vh;
-    }
-
-    .dashboard.active {
-      display: flex;
-    }
-
-    /* 左側影片區 */
-    .video-section {
-      flex: 1;
-      border-radius: 32px;
       overflow: hidden;
-      background: #1e1e1e;
-      position: relative;
-      box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.2);
-      align-self: stretch;
-      min-height: 400px;
+      color: #e8f0e8;
     }
 
-    .video-section video {
+    /* ===== 底層神聖光暈 ===== */
+    .sacred-glow {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 45%, rgba(80, 140, 80, 0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(180, 220, 160, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 20%, rgba(200, 230, 180, 0.1) 0%, transparent 60%),
+        #050805;
+    }
+
+    /* 緩慢飄動的金色粒子（永續層） */
+    .ethereal-particles {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ethereal-particles span {
+      position: absolute;
+      display: block;
+      width: 3px;
+      height: 3px;
+      background: radial-gradient(circle, #f5e9c8, rgba(245, 233, 200, 0));
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: floatParticle linear infinite;
+      box-shadow: 0 0 8px 2px rgba(245, 233, 200, 0.3);
+    }
+
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(110vh) translateX(0) scale(0.6);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: translateY(-10vh) translateX(40px) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* ===== 影片背景層 ===== */
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      overflow: hidden;
+      background: #0a0f0a;
+    }
+
+    .video-bg video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
+      opacity: 0.7;
+      filter: brightness(0.75) saturate(1.05) contrast(1.05);
     }
 
-    /* 如果沒有影片檔案時顯示的佔位符 */
-    .video-placeholder {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(145deg, #1f2e1f, #2b3d2b);
+    /* 影片上方的柔光與暗角 */
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 45%, transparent 0%, rgba(5, 8, 5, 0.55) 75%, rgba(5, 8, 5, 0.92) 100%),
+        linear-gradient(to bottom, rgba(5, 8, 5, 0.3) 0%, transparent 25%, transparent 65%, rgba(5, 8, 5, 0.5) 100%);
+      pointer-events: none;
+    }
+
+    /* 影片佔位符（無影片來源時顯示） */
+    .video-fallback {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 40%, #162816 0%, #050a05 70%),
+        radial-gradient(circle at 75% 65%, #1f3a1f 0%, transparent 55%);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #b8cfb8;
-      font-weight: 600;
-      font-size: 1.2rem;
       flex-direction: column;
-      gap: 12px;
+      gap: 20px;
+      color: #9dba9d;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .video-fallback .sacred-symbol {
+      font-size: 5rem;
+      line-height: 1;
+      animation: sacredPulse 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(160, 220, 140, 0.4));
+    }
+
+    @keyframes sacredPulse {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .video-fallback .fallback-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 6px;
+      color: #c8dcc0;
+      text-shadow: 0 0 30px rgba(180, 220, 160, 0.3);
+    }
+
+    .video-fallback .fallback-sub {
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      color: #7a9a7a;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+
+    /* ===== 神聖閃光層 ===== */
+    .flash-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(circle at 50% 45%, #ffffff 0%, #f0fff0 25%, rgba(200, 255, 200, 0.5) 55%, transparent 80%);
+    }
+
+    .flash-overlay.flash-active {
+      animation: sacredFlash 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes sacredFlash {
+      0% {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+      15% {
+        opacity: 1;
+        transform: scale(1.02);
+      }
+      35% {
+        opacity: 0.9;
+        transform: scale(1.12);
+      }
+      60% {
+        opacity: 0.4;
+        transform: scale(1.2);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.35);
+      }
+    }
+
+    /* 金色射線層 */
+    .rays-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 58;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .rays-overlay.rays-active {
+      animation: raysFade 1.6s ease-out forwards;
+    }
+
+    @keyframes raysFade {
+      0% { opacity: 0; }
+      20% { opacity: 0.9; }
+      60% { opacity: 0.5; }
+      100% { opacity: 0; }
+    }
+
+    .ray {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 50%;
+      left: 50%;
+      width: 2px;
+      height: 140vmax;
+      background: linear-gradient(to bottom, transparent 0%, rgba(255, 240, 200, 0.6) 30%, rgba(255, 240, 200, 0.8) 50%, rgba(255, 240, 200, 0.6) 70%, transparent 100%);
+      transform-origin: center;
+      transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(0);
+      animation: rayShoot 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: var(--delay, 0s);
+      opacity: 0;
+      filter: blur(1px);
     }
 
-    .video-placeholder svg {
-      opacity: 0.7;
+    @keyframes rayShoot {
+      0% {
+        transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(0);
+        opacity: 0;
+      }
+      30% {
+        transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(1);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(1.3);
+        opacity: 0;
+      }
     }
 
-    /* 右側祝福列表 */
-    .blessings-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    /* ===== 飄落花瓣 / 葉片 ===== */
+    .petals-container {
+      position: fixed;
+      inset: 0;
+      z-index: 55;
+      pointer-events: none;
+      overflow: hidden;
     }
 
-    .blessings-header {
+    .petal {
+      position: absolute;
+      top: -10%;
+      font-size: 1.2rem;
+      opacity: 0;
+      animation: petalFall linear forwards;
+      filter: drop-shadow(0 0 6px rgba(200, 230, 180, 0.5));
+    }
+
+    @keyframes petalFall {
+      0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.9;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg) translateX(var(--drift, 60px));
+        opacity: 0;
+      }
+    }
+
+    /* ===== 歡迎彈窗 / 簽到表單 ===== */
+    .welcome-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 8px;
-    }
-
-    .blessings-header h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #3b5e3b;
-      letter-spacing: -0.02em;
-    }
-
-    .blessings-count {
-      background: #e3ebe3;
-      color: #3f6840;
-      padding: 6px 14px;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .blessings-list {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding-right: 6px;
-      max-height: 60vh;
-      scroll-behavior: smooth;
-    }
-
-    /* 每一條祝福卡片 */
-    .blessing-item {
-      background: #fefcf8;
-      border-radius: 28px;
-      padding: 18px 20px;
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.03);
-      border: 1px solid #ece6dc;
-      animation: fadeSlideIn 0.5s ease forwards;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(4, 8, 4, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       opacity: 0;
-      transform: translateY(12px);
+      visibility: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
     }
 
-    @keyframes fadeSlideIn {
+    .welcome-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.97) 0%, rgba(245, 250, 242, 0.98) 100%);
+      border-radius: 48px;
+      padding: 48px 38px 42px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow:
+        0 40px 80px -20px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.7) inset,
+        0 0 80px rgba(160, 220, 160, 0.15),
+        0 0 120px rgba(200, 230, 180, 0.08);
+      transform: translateY(40px) scale(0.94);
+      opacity: 0;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-modal.show .modal-card {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    /* 卡片頂部神聖光暈 */
+    .modal-card::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 160px;
+      background: radial-gradient(ellipse, rgba(180, 230, 160, 0.45) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* 卡片頂部裝飾線 */
+    .modal-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(160, 210, 140, 0.6), transparent);
+      border-radius: 0 0 4px 4px;
+    }
+
+    .modal-greeting-icon {
+      font-size: 3.4rem;
+      line-height: 1;
+      margin-bottom: 14px;
+      display: block;
+      animation: sacredBounce 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(180, 220, 160, 0.5));
+    }
+
+    @keyframes sacredBounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.05); }
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.1rem;
+      font-weight: 600;
+      color: #2a422a;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+
+    .modal-title span {
+      background: linear-gradient(135deg, #3d6e3d, #6aa86a, #8bc48b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+
+    .modal-sub {
+      font-size: 0.95rem;
+      color: #7a937a;
+      font-weight: 500;
+      margin-bottom: 32px;
+      letter-spacing: 1.5px;
+      line-height: 1.6;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    .field {
+      text-align: left;
+      margin-bottom: 22px;
+    }
+
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: #4f6b4f;
+      margin-bottom: 8px;
+      letter-spacing: 1.2px;
+      padding-left: 8px;
+      text-transform: uppercase;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 16px 22px;
+      border: 2px solid #dfe8df;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-family: 'Quicksand', sans-serif;
+      background: #fbfdfb;
+      transition: all 0.3s ease;
+      outline: none;
+      color: #243024;
+      font-weight: 500;
+    }
+
+    .field input:focus {
+      border-color: #7fb07f;
+      background: #ffffff;
+      box-shadow: 0 0 0 5px rgba(127, 176, 127, 0.14), 0 0 30px rgba(160, 220, 160, 0.1);
+    }
+
+    .field input::placeholder {
+      color: #a8b8a8;
+      font-weight: 400;
+    }
+
+    .modal-submit {
+      width: 100%;
+      border: none;
+      background: linear-gradient(135deg, #3e6b3e, #5a8f5a, #6aa86a);
+      color: #ffffff;
+      padding: 18px 24px;
+      border-radius: 60px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: 'Quicksand', sans-serif;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+      box-shadow:
+        0 16px 32px -12px rgba(60, 110, 60, 0.55),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-submit::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .modal-submit:hover::before {
+      left: 100%;
+    }
+
+    .modal-submit:hover {
+      background: linear-gradient(135deg, #325632, #4a7a4a, #5a8f5a);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px -12px rgba(60, 110, 60, 0.65), 0 0 40px rgba(160, 220, 160, 0.2);
+    }
+
+    .modal-submit:active {
+      transform: translateY(1px);
+      box-shadow: 0 8px 20px -8px rgba(60, 110, 60, 0.5);
+    }
+
+    /* ===== 送出後的祝福展示 ===== */
+    .blessing-wall {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(4, 8, 4, 0.7);
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .blessing-wall.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .wall-card {
+      background: linear-gradient(165deg, #ffffff 0%, #f6fbf6 100%);
+      border-radius: 48px;
+      padding: 42px 34px 36px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow:
+        0 40px 80px -20px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.6) inset,
+        0 0 100px rgba(160, 220, 160, 0.12);
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blessing-wall.show .wall-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .wall-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px;
+      height: 130px;
+      background: radial-gradient(ellipse, rgba(180, 230, 160, 0.35) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .wall-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      color: #2a422a;
+      margin-bottom: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .wall-card .wall-sub {
+      color: #7a937a;
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+      font-weight: 500;
+      letter-spacing: 1.2px;
+    }
+
+    .wall-blessing-item {
+      background: #f6fbf6;
+      border-radius: 28px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      text-align: left;
+      border: 1px solid #e0ece0;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      animation: fadeSlideUp 0.7s ease forwards;
+      opacity: 0;
+      transform: translateY(16px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    }
+
+    @keyframes fadeSlideUp {
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    .blessing-icon {
-      font-size: 2rem;
+    .wall-blessing-item .icon {
+      font-size: 2.2rem;
       line-height: 1;
-      background: #ffffff;
-      width: 56px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
-      border: 1px solid #e6dfd5;
       flex-shrink: 0;
+      filter: drop-shadow(0 0 8px rgba(160, 220, 160, 0.4));
     }
 
-    .blessing-content {
-      flex: 1;
-    }
-
-    .blessing-name {
+    .wall-blessing-item .name {
       font-weight: 700;
-      font-size: 1.1rem;
-      color: #2b472b;
+      color: #2a422a;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .wall-blessing-item .msg {
+      color: #4f6b4f;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .wall-close {
+      margin-top: 16px;
+      border: none;
+      background: #e8f0e8;
+      color: #3e6b3e;
+      padding: 16px 32px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: 1px solid rgba(160, 210, 160, 0.3);
+    }
+
+    .wall-close:hover {
+      background: #d8e6d8;
+      box-shadow: 0 8px 20px -8px rgba(60, 110, 60, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* ===== 謝謝 Toast ===== */
+    .thankyou-toast {
+      position: fixed;
+      bottom: 48px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      z-index: 300;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(16px);
+      padding: 18px 32px;
+      border-radius: 70px;
+      box-shadow:
+        0 24px 48px -12px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(200, 230, 200, 0.6),
+        0 0 60px rgba(160, 220, 160, 0.15);
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 14px;
+      font-weight: 600;
+      color: #2a422a;
+      opacity: 0;
+      transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+      white-space: nowrap;
+      letter-spacing: 1px;
     }
 
-    .blessing-name .time-tag {
-      font-size: 0.7rem;
-      font-weight: 500;
-      background: #ede8e0;
-      color: #7a6e5e;
-      padding: 4px 10px;
-      border-radius: 40px;
-      letter-spacing: 0.2px;
+    .thankyou-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
 
-    .blessing-message {
-      margin-top: 6px;
-      font-size: 1rem;
-      line-height: 1.45;
-      color: #4f5e4f;
-      word-break: break-word;
-      font-weight: 500;
+    .thankyou-toast .emoji {
+      font-size: 1.6rem;
+      filter: drop-shadow(0 0 10px rgba(180, 220, 160, 0.5));
     }
 
-    /* 空狀態 */
-    .empty-message {
-      text-align: center;
-      padding: 40px 20px;
-      color: #a2b0a2;
-      font-weight: 500;
-      font-size: 1rem;
-      background: #f8f6f2;
-      border-radius: 28px;
-      border: 1px dashed #d6cfc4;
-    }
-
-    /* 響應式 */
-    @media (max-width: 820px) {
-      .dashboard.active {
-        flex-direction: column;
+    /* ===== 響應式 ===== */
+    @media (max-width: 520px) {
+      .modal-card {
+        padding: 36px 24px 32px;
+        border-radius: 36px;
       }
-      .video-section {
-        min-height: 240px;
-      }
-      .blessings-list {
-        max-height: 40vh;
-      }
-      .signin-title {
+      .modal-title {
         font-size: 1.7rem;
       }
-      .sticky-option {
-        font-size: 1.8rem;
-        padding: 12px 4px;
-        flex: 1 0 60px;
+      .modal-greeting-icon {
+        font-size: 2.8rem;
+      }
+      .wall-card {
+        padding: 32px 22px 28px;
+        border-radius: 36px;
+      }
+      .wall-card h3 {
+        font-size: 1.5rem;
+      }
+      .thankyou-toast {
+        font-size: 0.9rem;
+        padding: 14px 22px;
+        bottom: 28px;
       }
     }
 
-    /* 隱藏簽到卡 */
-    .signin-card.hidden {
-      display: none;
-    }
-
-    /* 小提示 */
-    .hint {
-      text-align: center;
-      font-size: 0.8rem;
-      color: #a09b92;
-      margin-top: 12px;
+    /* 減少動畫偏好 */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
 <body>
-<div class="app-container" id="appContainer">
 
-  <!-- 簽到卡片 (掃碼後彈出) -->
-  <div class="signin-card" id="signinCard">
-    <div class="signin-title">
-      <span>🌿 簽到</span>
-    </div>
-    <div class="signin-sub">留下你的名字與祝福，讓心意成為風景</div>
+  <!-- ===== 神聖光暈底層 ===== -->
+  <div class="sacred-glow"></div>
 
-    <div class="input-group">
-      <label>你的姓名</label>
-      <input type="text" id="nameInput" placeholder="例如：陳小美" maxlength="30" autocomplete="off">
-    </div>
+  <!-- ===== 永續飄動粒子 ===== -->
+  <div class="ethereal-particles" id="etherealParticles"></div>
 
-    <div class="input-group">
-      <label>你的祝福</label>
-      <input type="text" id="blessingInput" placeholder="寫下溫暖的話語..." maxlength="120" autocomplete="off">
-    </div>
-
-    <div class="input-group">
-      <label>選擇便籤圖案</label>
-      <div class="sticky-options" id="stickyOptions">
-        <div class="sticky-option selected" data-icon="🍃" data-label="葉子">🍃<span>葉子</span></div>
-        <div class="sticky-option" data-icon="🦋" data-label="蝴蝶">🦋<span>蝴蝶</span></div>
-        <div class="sticky-option" data-icon="🌸" data-label="花朵">🌸<span>花朵</span></div>
-        <div class="sticky-option" data-icon="⭐" data-label="星星">⭐<span>星星</span></div>
-        <div class="sticky-option" data-icon="🌿" data-label="小草">🌿<span>小草</span></div>
-        <div class="sticky-option" data-icon="🐞" data-label="瓢蟲">🐞<span>瓢蟲</span></div>
-      </div>
-    </div>
-
-    <button class="btn" id="submitBtn">
-      <span>✨ 送出祝福</span>
-    </button>
-    <div class="hint">掃碼後即可填寫，送出後自動跳轉看板</div>
-  </div>
-
-  <!-- 祝福看板 (簽到後顯示) -->
-  <div class="dashboard" id="dashboard">
-    <!-- 左側影片 -->
-    <div class="video-section" id="videoSection">
-      <!-- 如果有影片檔案，可將下面video的src改為你的影片路徑 -->
-      <video autoplay muted loop playsinline poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%231f2e1f'/%3E%3Ctext x='400' y='300' font-family='Quicksand, sans-serif' font-size='24' fill='%23b8cfb8' text-anchor='middle'%3E🌱 祝福播放中 🌱%3C/text%3E%3C/svg%3E">
-        <source src="" type="video/mp4">
-        <!-- 若無影片則顯示佔位符 -->
-      </video>
-      <div class="video-placeholder" id="videoPlaceholder">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#b8cfb8" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        <span>影片播放區</span>
-        <span style="font-size:0.8rem; opacity:0.7;">可放置活動回顧或自然影片</span>
-      </div>
-    </div>
-
-    <!-- 右側祝福列表 -->
-    <div class="blessings-section">
-      <div class="blessings-header">
-        <h2>💬 祝福的話</h2>
-        <div class="blessings-count" id="blessingsCount">0 則</div>
-      </div>
-      <div class="blessings-list" id="blessingsList">
-        <!-- 動態插入祝福卡片 -->
-        <div class="empty-message" id="emptyMessage">✨ 還沒有祝福，快來簽到留下第一則！</div>
-      </div>
+  <!-- ===== 影片背景 ===== -->
+  <div class="video-bg">
+    <!-- 若要使用自己的影片，請將下方 source 的 src 改為您的影片網址 -->
+    <video autoplay muted loop playsinline poster="">
+      <source src="" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+    <div class="video-fallback" id="videoFallback">
+      <div class="sacred-symbol">🌿</div>
+      <div class="fallback-text">聖德安座設壇</div>
+      <div class="fallback-sub">Welcome · 歡迎您的到來</div>
     </div>
   </div>
 
-</div>
+  <!-- ===== 閃光與射線層 ===== -->
+  <div class="flash-overlay" id="flashOverlay"></div>
+  <div class="rays-overlay" id="raysOverlay"></div>
+  <div class="petals-container" id="petalsContainer"></div>
 
-<script>
-  (function() {
-    // ---------- 狀態管理 ----------
-    // 使用 localStorage 模擬後端儲存，讓重新整理後資料還在（可選）
-    const STORAGE_KEY = 'blessing_wall_data';
+  <!-- ===== 歡迎簽到彈窗 ===== -->
+  <div class="welcome-modal" id="welcomeModal">
+    <div class="modal-card">
+      <span class="modal-greeting-icon">🌿</span>
+      <h1 class="modal-title">謝謝蒞臨 <span>聖德安座設壇</span></h1>
+      <p class="modal-sub">請填上您的姓名與祝福<br>讓這份心意留下美好的印記</p>
 
-    // 預設範例資料 (讓看板一開始不至於太空，但也可以完全空)
-    const defaultBlessings = [
-      { id: '1', name: '小綠', message: '願大家平安健康，像葉子一樣充滿生机！', icon: '🍃', timestamp: Date.now() - 3600000 },
-      { id: '2', name: '蝴蝶仙子', message: '祝福每個夢想都能翩翩起舞～', icon: '🦋', timestamp: Date.now() - 1800000 },
-      { id: '3', name: '阿星', message: '天天都是好日子，閃閃發光！', icon: '⭐', timestamp: Date.now() - 600000 }
-    ];
+      <div class="field">
+        <label for="visitorName">您的姓名</label>
+        <input type="text" id="visitorName" placeholder="例如：陳小美" maxlength="30" autocomplete="off">
+      </div>
 
-    // 讀取現有資料
-    function loadBlessings() {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        try {
-          return JSON.parse(stored);
-        } catch (e) {
-          return [...defaultBlessings];
+      <div class="field">
+        <label for="visitorBlessing">您的祝福</label>
+        <input type="text" id="visitorBlessing" placeholder="寫下溫暖的祝福..." maxlength="120" autocomplete="off">
+      </div>
+
+      <button class="modal-submit" id="submitBlessingBtn">
+        <span>送出祝福</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== 送出後的祝福展示 ===== -->
+  <div class="blessing-wall" id="blessingWall">
+    <div class="wall-card">
+      <h3>祝福已收到</h3>
+      <p class="wall-sub">感謝您的參與，願美好與您同在</p>
+      <div id="wallBlessingContent"></div>
+      <button class="wall-close" id="wallCloseBtn">關閉</button>
+    </div>
+  </div>
+
+  <!-- ===== 謝謝 Toast ===== -->
+  <div class="thankyou-toast" id="thankyouToast">
+    <span class="emoji">🌿</span>
+    <span>祝福已送出，感謝您！</span>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ---------- DOM 元素 ----------
+      const videoEl = document.querySelector('.video-bg video');
+      const videoFallback = document.getElementById('videoFallback');
+      const flashOverlay = document.getElementById('flashOverlay');
+      const raysOverlay = document.getElementById('raysOverlay');
+      const petalsContainer = document.getElementById('petalsContainer');
+      const welcomeModal = document.getElementById('welcomeModal');
+      const visitorName = document.getElementById('visitorName');
+      const visitorBlessing = document.getElementById('visitorBlessing');
+      const submitBtn = document.getElementById('submitBlessingBtn');
+      const thankyouToast = document.getElementById('thankyouToast');
+      const blessingWall = document.getElementById('blessingWall');
+      const wallBlessingContent = document.getElementById('wallBlessingContent');
+      const wallCloseBtn = document.getElementById('wallCloseBtn');
+      const etherealParticles = document.getElementById('etherealParticles');
+
+      // ---------- 狀態 ----------
+      let hasSubmitted = false;
+
+      // ---------- 永續飄動粒子 ----------
+      function createEtherealParticles() {
+        const count = 30;
+        for (let i = 0; i < count; i++) {
+          const span = document.createElement('span');
+          span.style.left = Math.random() * 100 + '%';
+          span.style.animationDuration = (12 + Math.random() * 20) + 's';
+          span.style.animationDelay = (Math.random() * -20) + 's';
+          span.style.width = (2 + Math.random() * 4) + 'px';
+          span.style.height = span.style.width;
+          span.style.opacity = 0.2 + Math.random() * 0.5;
+          etherealParticles.appendChild(span);
         }
       }
-      return [...defaultBlessings];
-    }
 
-    // 保存資料
-    function saveBlessings(blessingsArray) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(blessingsArray));
-    }
+      // ---------- 影片處理 ----------
+      function setupVideo() {
+        const sourceEl = videoEl.querySelector('source');
+        const hasSource = sourceEl && sourceEl.src && sourceEl.src.trim() !== '' && !sourceEl.src.endsWith(window.location.href);
 
-    // 當前選中的便籤圖案
-    let selectedIcon = '🍃';
-
-    // DOM 元素
-    const signinCard = document.getElementById('signinCard');
-    const dashboard = document.getElementById('dashboard');
-    const nameInput = document.getElementById('nameInput');
-    const blessingInput = document.getElementById('blessingInput');
-    const stickyOptions = document.getElementById('stickyOptions');
-    const submitBtn = document.getElementById('submitBtn');
-    const blessingsList = document.getElementById('blessingsList');
-    const blessingsCount = document.getElementById('blessingsCount');
-    const emptyMessage = document.getElementById('emptyMessage');
-    const videoSection = document.getElementById('videoSection');
-    const videoPlaceholder = document.getElementById('videoPlaceholder');
-
-    // 初始化：載入便籤圖案選擇事件
-    function initStickyOptions() {
-      const options = document.querySelectorAll('.sticky-option');
-      options.forEach(opt => {
-        opt.addEventListener('click', function() {
-          // 移除所有 selected
-          options.forEach(o => o.classList.remove('selected'));
-          this.classList.add('selected');
-          selectedIcon = this.dataset.icon;
-        });
-      });
-      // 預設選中第一個（葉子）
-      const firstOption = document.querySelector('.sticky-option[data-icon="🍃"]');
-      if (firstOption) {
-        firstOption.classList.add('selected');
-        selectedIcon = '🍃';
-      }
-    }
-
-    // 渲染祝福列表 (從 localStorage 讀取)
-    function renderBlessings() {
-      const blessings = loadBlessings();
-      // 按時間排序（新的在下面，或者可以舊的在上？ 此處按時間先後，舊的在上，新的追加在下方，符合「陸續顯示」）
-      // 但為了「慢慢顯示」效果，我們按時間升序排列 (舊 -> 新)
-      const sorted = [...blessings].sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-
-      // 清空列表，但保留空狀態元素？ 如果沒有資料則顯示空狀態
-      blessingsList.innerHTML = '';
-
-      if (sorted.length === 0) {
-        // 顯示空狀態
-        const emptyDiv = document.createElement('div');
-        emptyDiv.className = 'empty-message';
-        emptyDiv.textContent = '✨ 還沒有祝福，快來簽到留下第一則！';
-        blessingsList.appendChild(emptyDiv);
-        blessingsCount.textContent = '0 則';
-        return;
-      }
-
-      // 逐一創建卡片
-      sorted.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'blessing-item';
-        // 動畫延遲，讓每個卡片依序出現
-        card.style.animationDelay = `${index * 0.08}s`;
-
-        const iconDiv = document.createElement('div');
-        iconDiv.className = 'blessing-icon';
-        iconDiv.textContent = item.icon || '🍃';
-
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'blessing-content';
-
-        const nameDiv = document.createElement('div');
-        nameDiv.className = 'blessing-name';
-        // 顯示名字與時間標籤
-        const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) : '';
-        nameDiv.innerHTML = `${escapeHtml(item.name)} <span class="time-tag">${timeStr}</span>`;
-
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'blessing-message';
-        msgDiv.textContent = item.message || '';
-
-        contentDiv.appendChild(nameDiv);
-        contentDiv.appendChild(msgDiv);
-        card.appendChild(iconDiv);
-        card.appendChild(contentDiv);
-        blessingsList.appendChild(card);
-      });
-
-      // 更新計數
-      blessingsCount.textContent = `${sorted.length} 則`;
-
-      // 自動滾動到底部，讓最新祝福可見（但如果使用者手動滾動就不強制）
-      // 只有當列表在底部附近時才自動滾動，這裡簡化：每次渲染後滾到底部（因為新留言在最後）
-      // 但是可能打擾用戶，所以加一點判斷：如果列表接近底部就滾動
-      const list = blessingsList;
-      // 使用 requestAnimationFrame 確保 DOM 已更新
-      requestAnimationFrame(() => {
-        // 如果是新送出，通常希望看到最新，直接滾到底
-        list.scrollTop = list.scrollHeight;
-      });
-    }
-
-    // 簡單防XSS
-    function escapeHtml(text) {
-      if (!text) return '';
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // 新增一則祝福
-    function addBlessing(name, message, icon) {
-      const blessings = loadBlessings();
-      const newBlessing = {
-        id: Date.now() + '-' + Math.random().toString(36).substr(2, 6),
-        name: name.trim(),
-        message: message.trim(),
-        icon: icon,
-        timestamp: Date.now()
-      };
-      blessings.push(newBlessing);
-      saveBlessings(blessings);
-      renderBlessings(); // 重新渲染
-    }
-
-    // 切換到看板頁面 (隱藏簽到卡，顯示dashboard)
-    function showDashboard() {
-      signinCard.classList.add('hidden');
-      dashboard.classList.add('active');
-      // 重新渲染祝福列表，確保最新
-      renderBlessings();
-
-      // 嘗試播放影片 (如果有的話，並且瀏覽器允許)
-      const video = videoSection.querySelector('video');
-      if (video && video.querySelector('source')?.src) {
-        video.play().catch(e => console.log('自動播放失敗:', e));
-        if (videoPlaceholder) videoPlaceholder.style.display = 'none';
-      } else {
-        // 沒有影片，顯示佔位符 (默認已顯示)
-        if (videoPlaceholder) videoPlaceholder.style.display = 'flex';
-      }
-    }
-
-    // 處理送出按鈕
-    function handleSubmit() {
-      const name = nameInput.value.trim();
-      const message = blessingInput.value.trim();
-
-      // 簡單驗證
-      if (!name) {
-        alert('請填寫你的姓名～');
-        nameInput.focus();
-        return;
-      }
-      if (!message) {
-        alert('請寫下你的祝福～');
-        blessingInput.focus();
-        return;
-      }
-
-      // 新增祝福
-      addBlessing(name, message, selectedIcon);
-
-      // 清空輸入 (但保留以便下次? 但頁面切換後不需要了)
-      nameInput.value = '';
-      blessingInput.value = '';
-
-      // 切換到看板
-      showDashboard();
-    }
-
-    // 初始化：如果有任何已存在的簽到紀錄，是否直接顯示看板？ 不，仍顯示簽到頁面。但我們保留 localStorage 資料
-    // 但可以根據 url 參數？ 不需要。
-
-    // 若 localStorage 中沒有任何資料，但我們有 default，所以看板會顯示範例。
-
-    // 監聽送出按鈕
-    submitBtn.addEventListener('click', handleSubmit);
-
-    // 允許 Enter 鍵在 blessingInput 送出? 但 name 也要，所以可以監聽最後一個輸入框
-    blessingInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleSubmit();
-      }
-    });
-
-    // 初始化便籤選項
-    initStickyOptions();
-
-    // 頁面載入時，若dashboard尚未激活，先隱藏它 (已在CSS處理)
-    // 但如果用戶之前已經簽到過，我們還是顯示簽到頁面，讓他可以再次簽到？ 可以設計為可以多次簽到，看板會累積。
-    // 這樣符合「陸續顯示出席人與祝福」。
-    // 所以保留簽到頁面在頂部，但不使用彈窗形式，而是直接顯示？ 但題目說「一來到我就scan QR就會pop out 一個簽到的頁面」，
-    // 所以我們預設顯示簽到卡，看板隱藏。但我們可以模擬掃碼後顯示簽到卡(已經顯示)，送出後彈出看板。
-    // 因為是單頁，所以我們這樣設計。
-
-    // 模擬 QR Code 掃描後進入頁面 (本來就是這個頁面) -> 顯示簽到卡 (已是默認)
-    // 但如果使用者之前已經簽到過，應該還是顯示簽到卡讓他可以再簽？ 但這樣看板要如何看到之前的？ 看板只在簽到後出現。
-    // 但儲存的資料是累積的，所以一旦有人簽到，就會顯示所有祝福。
-    // 我們也可以增加一個「直接查看看板」的按鈕？ 但不需要，簡潔為主。
-
-    // 另外，為了讓看板動畫「慢慢顯示」, 我們已經在render時加上延遲。
-
-    // 處理影片：若沒有來源，顯示佔位符；若有來源，隱藏佔位符。
-    // 可選：如果影片沒有加載成功，顯示佔位符。
-    const videoEl = document.querySelector('video');
-    if (videoEl) {
-      // 如果 source src 為空，則不播放，顯示佔位符
-      const sourceEl = videoEl.querySelector('source');
-      if (sourceEl && (!sourceEl.src || sourceEl.src === window.location.href || sourceEl.src === '')) {
-        // 沒有有效影片來源
-        if (videoPlaceholder) videoPlaceholder.style.display = 'flex';
-        videoEl.style.display = 'none'; // 隱藏 video 元素避免顯示空白
-      } else {
-        // 有來源，嘗試隱藏佔位符，但等可以播放時
-        videoEl.addEventListener('loadeddata', () => {
-          if (videoPlaceholder) videoPlaceholder.style.display = 'none';
-        });
-        // 如果載入失敗，顯示佔位符
-        videoEl.addEventListener('error', () => {
-          if (videoPlaceholder) videoPlaceholder.style.display = 'flex';
+        if (!hasSource) {
           videoEl.style.display = 'none';
-        });
+          videoFallback.style.display = 'flex';
+        } else {
+          videoFallback.style.display = 'none';
+          videoEl.style.display = 'block';
+          videoEl.play().catch(() => {});
+          videoEl.addEventListener('error', () => {
+            videoEl.style.display = 'none';
+            videoFallback.style.display = 'flex';
+          });
+          videoEl.addEventListener('loadeddata', () => {
+            videoFallback.style.display = 'none';
+          });
+        }
       }
-    }
 
-    // 重新整理看板計數
-    // 如果使用者手動打開頁面但沒有簽到，但想看之前資料? 但預設是簽到頁面，所以無妨。
+      // ---------- 神聖閃光 + 射線 + 花瓣 ----------
+      function triggerSacredFlash() {
+        // 閃光
+        flashOverlay.classList.add('flash-active');
+        setTimeout(() => {
+          flashOverlay.classList.remove('flash-active');
+        }, 1600);
 
-    // 如果需要，可以在頁面載入時預先渲染一次祝福列表（隱藏狀態下），但為了效能，等顯示再渲染。
-    // 但計數器要更新？ 等顯示時再更新。
-    // 但如果 dashboard 尚未顯示， blessingsList 不可見，但我們可以在初始時渲染一次，但沒關係。
-    // 這裡我們在 showDashboard 時渲染。
-  })();
-</script>
+        // 射線
+        raysOverlay.classList.add('rays-active');
+        createRays();
+        setTimeout(() => {
+          raysOverlay.classList.remove('rays-active');
+        }, 2000);
+
+        // 花瓣
+        createPetals();
+      }
+
+      function createRays() {
+        raysOverlay.innerHTML = '';
+        const rayCount = 12;
+        for (let i = 0; i < rayCount; i++) {
+          const ray = document.createElement('div');
+          ray.className = 'ray';
+          const angle = (i * 30) + (Math.random() * 10 - 5);
+          ray.style.setProperty('--angle', angle + 'deg');
+          ray.style.setProperty('--delay', (Math.random() * 0.3) + 's');
+          raysOverlay.appendChild(ray);
+        }
+      }
+
+      function createPetals() {
+        petalsContainer.innerHTML = '';
+        const petalCount = 24;
+        const symbols = ['🍃', '🌸', '🌿', '✨', '🍂'];
+        for (let i = 0; i < petalCount; i++) {
+          const petal = document.createElement('div');
+          petal.className = 'petal';
+          petal.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+          petal.style.left = Math.random() * 100 + '%';
+          petal.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+          petal.style.animationDuration = (5 + Math.random() * 6) + 's';
+          petal.style.animationDelay = (Math.random() * 2) + 's';
+          petal.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
+          petalsContainer.appendChild(petal);
+        }
+      }
+
+      // ---------- 彈出歡迎視窗 ----------
+      function showWelcomeModal() {
+        welcomeModal.classList.add('show');
+        setTimeout(() => {
+          visitorName.focus();
+        }, 800);
+      }
+
+      // ---------- 頁面載入流程 ----------
+      function initSequence() {
+        createEtherealParticles();
+        setupVideo();
+
+        // 延遲讓影片先播放，然後觸發神聖閃光
+        setTimeout(() => {
+          triggerSacredFlash();
+
+          // 閃光後彈出歡迎視窗
+          setTimeout(() => {
+            showWelcomeModal();
+          }, 900);
+        }, 1200);
+      }
+
+      // ---------- 送出祝福 ----------
+      function handleSubmit() {
+        if (hasSubmitted) return;
+
+        const name = visitorName.value.trim();
+        const blessing = visitorBlessing.value.trim();
+
+        if (!name) {
+          shakeInput(visitorName);
+          visitorName.focus();
+          return;
+        }
+        if (!blessing) {
+          shakeInput(visitorBlessing);
+          visitorBlessing.focus();
+          return;
+        }
+
+        hasSubmitted = true;
+
+        showThankyouToast();
+        welcomeModal.classList.remove('show');
+
+        setTimeout(() => {
+          showBlessingWall(name, blessing);
+        }, 600);
+
+        saveBlessingToStorage(name, blessing);
+      }
+
+      function shakeInput(input) {
+        input.style.transition = 'transform 0.1s ease, border-color 0.2s ease';
+        input.style.transform = 'translateX(-8px)';
+        input.style.borderColor = '#e07a7a';
+        setTimeout(() => { input.style.transform = 'translateX(8px)'; }, 80);
+        setTimeout(() => { input.style.transform = 'translateX(-6px)'; }, 160);
+        setTimeout(() => { input.style.transform = 'translateX(6px)'; }, 240);
+        setTimeout(() => { input.style.transform = 'translateX(-3px)'; }, 320);
+        setTimeout(() => { input.style.transform = 'translateX(0)'; input.style.borderColor = ''; }, 400);
+      }
+
+      function showThankyouToast() {
+        thankyouToast.classList.add('show');
+        setTimeout(() => {
+          thankyouToast.classList.remove('show');
+        }, 3200);
+      }
+
+      // ---------- 祝福牆 ----------
+      function showBlessingWall(name, blessing) {
+        wallBlessingContent.innerHTML = `
+          <div class="wall-blessing-item" style="animation-delay: 0.1s">
+            <div class="icon">🌿</div>
+            <div>
+              <div class="name">${escapeHtml(name)}</div>
+              <div class="msg">${escapeHtml(blessing)}</div>
+            </div>
+          </div>
+        `;
+        blessingWall.classList.add('show');
+      }
+
+      wallCloseBtn.addEventListener('click', () => {
+        blessingWall.classList.remove('show');
+      });
+
+      // ---------- 儲存資料 ----------
+      function saveBlessingToStorage(name, blessing) {
+        try {
+          const key = 'shengde_blessings';
+          const existing = JSON.parse(localStorage.getItem(key) || '[]');
+          existing.push({
+            name: name,
+            blessing: blessing,
+            timestamp: Date.now()
+          });
+          localStorage.setItem(key, JSON.stringify(existing));
+        } catch (e) {
+          // 忽略儲存錯誤
+        }
+      }
+
+      // ---------- 輔助：escapeHtml ----------
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // ---------- 事件綁定 ----------
+      submitBtn.addEventListener('click', handleSubmit);
+
+      visitorBlessing.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleSubmit();
+        }
+      });
+
+      visitorName.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          visitorBlessing.focus();
+        }
+      });
+
+      // ---------- 啟動 ----------
+      initSequence();
+
+      window.addEventListener('load', () => {
+        if (videoEl.style.display !== 'none') {
+          videoEl.play().catch(() => {});
+        }
+      });
+
+    })();
+  </script>
 </body>
 </html>
