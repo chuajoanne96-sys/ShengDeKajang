@@ -156,7 +156,7 @@
   }
 
   /* =========================================
-     💬 祝福区（高度跟随影片框，文字大小和标题一样）
+     💬 祝福区（高度跟随影片框）
      ========================================= */
   #stage {
     width: 30%;
@@ -180,61 +180,64 @@
   /* 每条祝福：无边框、无底色，只有文字 */
   .blessing {
     position: absolute;
-    left: 50%; bottom: -180px;
+    left: 50%;
+    bottom: -180px;
     transform: translateX(-50%) scale(0.35);
     opacity: 0;
     text-align: center;
     width: 94%;
     pointer-events: none;
     padding: 0; border: none; background: none; box-shadow: none;
+    /* 变亮和变大保持 3 秒 → 用 3s 的过渡 */
     transition:
-      transform 0.005s linear,
+      transform 3s linear,
       opacity 0.5s ease,
-      filter 0.005s linear;
+      filter 3s linear;
     will-change: transform, opacity, filter;
   }
 
-  /* 姓名：比标题第二行「聖德安座設壇」大一点 */
+  /* 姓名：和「聖德安座設壇」一样大（3em） */
   .blessing .name {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 3.6em;                 /* ← 3.6em */
+    font-size: 3em;
     color: #a8843f;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     font-weight: bold;
-    letter-spacing: 5px;
+    letter-spacing: 4px;
     text-shadow: 0 0 8px rgba(255,230,160,0.6), 0 2px 4px rgba(139,107,46,0.3);
-    transition: color 0.005s linear, text-shadow 0.005s linear;
+    transition: color 3s linear, text-shadow 3s linear;
   }
   /* 祝福语：和「聖德安座設壇」一样大（3em） */
   .blessing .msg {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 3em;                   /* ← 3em，和标题第二行一样 */
+    font-size: 3em;
     color: #5c4a2a;
     line-height: 1.5;
     word-break: break-word;
     text-shadow: 0 0 6px rgba(255,245,210,0.5), 0 1px 3px rgba(139,107,46,0.25);
-    transition: color 0.005s linear, text-shadow 0.005s linear;
+    transition: color 3s linear, text-shadow 3s linear;
   }
 
   .blessing.rising { animation: floatUp 8s linear forwards; }
 
+  /* 到中央：变亮（保持 3 秒后恢复） */
   .blessing.center {
-    filter: brightness(1.35) saturate(1.2);
+    filter: brightness(1.4) saturate(1.25);
   }
   .blessing.center .name {
     color: #ffe9a3;
     text-shadow:
-      0 0 22px rgba(255,215,100,1),
-      0 0 50px rgba(255,230,160,0.95),
-      0 0 90px rgba(255,245,210,0.6),
+      0 0 25px rgba(255,215,100,1),
+      0 0 55px rgba(255,230,160,0.95),
+      0 0 95px rgba(255,245,210,0.65),
       0 2px 6px rgba(139,107,46,0.4);
   }
   .blessing.center .msg {
-    color: #8b6b2e;
+    color: #d4af37;
     text-shadow:
-      0 0 20px rgba(255,230,160,1),
-      0 0 44px rgba(255,245,210,0.85),
-      0 0 80px rgba(255,250,230,0.55),
+      0 0 25px rgba(255,230,160,1),
+      0 0 50px rgba(255,245,210,0.9),
+      0 0 85px rgba(255,250,230,0.6),
       0 2px 5px rgba(139,107,46,0.35);
   }
 
@@ -284,8 +287,9 @@
   const MSG_COL = 1;
   const INTERVAL = 3000;
   const ANIM_DURATION = 8000;
-  const CENTER_START = 3200;
-  const CENTER_END   = 5200;
+  const CENTER_START = 2800;     // 到中央的时间
+  const CENTER_HOLD  = 3000;     // 变亮保持 3 秒
+  const CENTER_END   = CENTER_START + CENTER_HOLD;
   const REFRESH_EVERY = 10;
 
   (function createSnow() {
@@ -385,14 +389,16 @@
       <div class="name">${escapeHTML(item.name)}</div>
       <div class="msg">${escapeHTML(item.msg)}</div>
     `;
-    const offsetX = (Math.random() - 0.5) * 40;
-    div.style.marginLeft = offsetX + "px";
+    // 不再加随机偏移，全部居中
     stage.appendChild(div);
 
     requestAnimationFrame(() => div.classList.add("rising"));
 
+    // 到中央：变亮
     setTimeout(() => { if (div.isConnected) div.classList.add("center"); }, CENTER_START);
+    // 3 秒后恢复
     setTimeout(() => { if (div.isConnected) div.classList.remove("center"); }, CENTER_END);
+    // 动画结束移除
     setTimeout(() => div.remove(), ANIM_DURATION + 500);
   }
 
