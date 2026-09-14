@@ -1,12 +1,532 @@
 <!DOCTYPE html>
-<html>
-<body style="background:#000; margin:0; overflow:hidden;">
-  <iframe
-    width="100%" height="100%"
-    style="position:fixed;inset:0;border:none;"
-    src="https://www.youtube.com/embed/h1H3Ynd4v20?autoplay=1&mute=1"
-    allow="autoplay; encrypted-media"
-    allowfullscreen>
-  </iframe>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>圣德安座设坛祝福展示</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    overflow: hidden;
+    font-family: "STKaiti", "KaiTi", "楷体", "SimSun", "宋体", "Microsoft YaHei", serif;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: #f6efdc;
+  }
+
+  /* =========================================
+     🏔 山水画背景（background.gif）
+     ========================================= */
+  #landscape {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+  }
+  #landscape .painting {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.85;
+    animation: paintingBreath 40s ease-in-out infinite alternate;
+  }
+  @keyframes paintingBreath {
+    0%   { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.04) translate(-0.6%, -0.6%); }
+  }
+
+  #landscape .overlay {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 40%, rgba(253, 248, 232, 0.25) 0%, rgba(246, 239, 220, 0.35) 55%, rgba(236, 223, 192, 0.4) 100%);
+    pointer-events: none;
+  }
+
+  #landscape .cloud {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.35) 40%, transparent 75%);
+    filter: blur(20px); pointer-events: none;
+  }
+  #landscape .c1 { top: 20%; left: -20%; width: 60%; height: 22%; animation: cloudDrift1 55s linear infinite; }
+  #landscape .c2 { top: 40%; left: -30%; width: 70%; height: 26%; animation: cloudDrift2 70s linear infinite; opacity: 0.7; }
+  #landscape .c3 { top: 60%; left: -25%; width: 65%; height: 22%; animation: cloudDrift3 85s linear infinite; opacity: 0.6; }
+
+  @keyframes cloudDrift1 {
+    0%   { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(120vw) translateY(-15px); }
+  }
+  @keyframes cloudDrift2 {
+    0%   { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(120vw) translateY(10px); }
+  }
+  @keyframes cloudDrift3 {
+    0%   { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(120vw) translateY(-8px); }
+  }
+
+  #landscape .ink {
+    position: absolute; top: -20px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(80, 65, 40, 0.35) 0%, rgba(80, 65, 40, 0) 70%);
+    animation: inkFall linear infinite; opacity: 0;
+  }
+  @keyframes inkFall {
+    0%   { transform: translateY(-20px) translateX(0) scale(0.6); opacity: 0; }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(110vh) translateX(var(--drift, 40px)) scale(1); opacity: 0; }
+  }
+
+  /* =========================================
+     ✨ 金粉
+     ========================================= */
+  #goldDust {
+    position: fixed; inset: 0; pointer-events: none; z-index: 3; overflow: hidden;
+  }
+  .dust {
+    position: absolute; top: -20px; width: 6px; height: 6px; border-radius: 50%;
+    background: radial-gradient(circle, #fff6c9 0%, #ffd966 40%, rgba(212, 175, 55, 0) 70%);
+    box-shadow: 0 0 8px rgba(255, 215, 100, 0.9);
+    animation: fall linear infinite; opacity: 0;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-20px) translateX(0) scale(0.6); opacity: 0; }
+    10%  { opacity: 0.9; }
+    90%  { opacity: 0.7; }
+    100% { transform: translateY(110vh) translateX(var(--drift, 30px)) scale(1); opacity: 0; }
+  }
+
+  /* =========================================
+     ❄ 祥雪
+     ========================================= */
+  #snowLayer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    overflow: hidden;
+  }
+  .snowflake {
+    position: absolute;
+    top: -30px;
+    color: #ffffff;
+    user-select: none;
+    pointer-events: none;
+    text-shadow:
+      0 0 6px rgba(255, 255, 255, 0.9),
+      0 0 12px rgba(200, 220, 255, 0.6);
+    animation: snowFall linear infinite;
+    opacity: 0;
+  }
+  @keyframes snowFall {
+    0% { transform: translateY(-30px) translateX(0) rotate(0deg); opacity: 0; }
+    8%  { opacity: var(--maxOp, 0.9); }
+    90% { opacity: var(--maxOp, 0.9); }
+    100% {
+      transform: translateY(110vh) translateX(var(--drift, 30px)) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* =========================================
+     顶部标题
+     ========================================= */
+  #title {
+    width: 100%;
+    text-align: center;
+    padding: 18px 10px 10px;
+    z-index: 10;
+    position: relative;
+  }
+  #title::before {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 900px; height: 200px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse, rgba(255, 245, 210, 0.75) 0%, transparent 70%);
+    pointer-events: none; z-index: -1;
+  }
+
+  #title .line1 {
+    font-family: "STKaiti", "KaiTi", "楷体", serif;
+    font-size: 1.4em;
+    letter-spacing: 12px;
+    color: #8b6b2e;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 3px rgba(139, 107, 46, 0.3);
+  }
+
+  #title .line2 {
+    font-family: "STKaiti", "KaiTi", "楷体", "STSong", "宋体", serif;
+    font-size: 3em;
+    letter-spacing: 18px;
+    font-weight: bold;
+    color: #6e4f18;
+    padding-left: 18px;
+    text-shadow:
+      0 0 20px rgba(212, 175, 55, 0.85),
+      0 0 40px rgba(255, 230, 160, 0.5),
+      0 3px 6px rgba(110, 79, 24, 0.35);
+    display: inline-block;
+  }
+
+  #title::after {
+    content: "";
+    display: block;
+    width: 260px;
+    height: 2px;
+    margin: 10px auto 0;
+    background: linear-gradient(90deg, transparent, #c9a227, #ffe9a3, #d4af37, #c9a227, transparent);
+    background-size: 200% 100%;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+    animation: shimmer 4s linear infinite;
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* =========================================
+     主体区
+     ========================================= */
+  #main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    padding: 0 24px 24px;
+    gap: 22px;
+    z-index: 5;
+    align-items: center;
+  }
+
+  /* =========================================
+     🎬 影片区（16:9）
+     ========================================= */
+  #video-area {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  #video-frame {
+    position: relative;
+    width: 100%;
+    max-height: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 20px;
+    padding: 10px;
+    background: linear-gradient(145deg, rgba(255, 252, 242, 0.92), rgba(240, 228, 200, 0.7));
+    box-shadow:
+      0 0 0 2px rgba(201, 162, 39, 0.55),
+      0 0 0 5px rgba(255, 252, 242, 0.6),
+      0 0 0 6px rgba(201, 162, 39, 0.25),
+      0 0 35px rgba(212, 175, 55, 0.35),
+      inset 0 0 30px rgba(255, 250, 235, 0.7);
+  }
+  #video-frame::before {
+    content: "";
+    display: block;
+    padding-top: 56.25%;
+  }
+  #video-frame iframe {
+    position: absolute;
+    top: 10px; left: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border: none;
+    border-radius: 12px;
+    background: #000;
+  }
+
+  /* =========================================
+     💬 祝福区（高度和影片框一致）
+     ========================================= */
+  #stage {
+    width: 40%;
+    aspect-ratio: 16 / 9;
+    max-height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    background: linear-gradient(160deg, rgba(255, 252, 242, 0.55), rgba(240, 228, 200, 0.35));
+    box-shadow:
+      0 0 0 2px rgba(201, 162, 39, 0.5),
+      0 0 0 5px rgba(255, 252, 242, 0.6),
+      0 0 0 6px rgba(201, 162, 39, 0.25),
+      0 0 30px rgba(212, 175, 55, 0.22),
+      inset 0 0 40px rgba(255, 250, 235, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 每条祝福：无边框、无底色，只有文字 */
+  .blessing {
+    position: absolute;
+    left: 50%; bottom: -180px;
+    transform: translateX(-50%) scale(0.35);
+    opacity: 0;
+    text-align: center;
+    width: 94%;
+    pointer-events: none;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+    transition:
+      transform 0.005s linear,
+      opacity 0.5s ease,
+      filter 0.005s linear;
+    will-change: transform, opacity, filter;
+  }
+
+  .blessing .name {
+    font-family: "STKaiti", "KaiTi", "楷体", serif;
+    font-size: 2.1em;
+    color: #a8843f;
+    margin-bottom: 10px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    text-shadow:
+      0 0 8px rgba(255, 230, 160, 0.6),
+      0 2px 4px rgba(139, 107, 46, 0.3);
+    transition: color 0.005s linear, text-shadow 0.005s linear;
+  }
+
+  .blessing .msg {
+    font-family: "STKaiti", "KaiTi", "楷体", serif;
+    font-size: 1.7em;
+    color: #5c4a2a;
+    line-height: 1.5;
+    word-break: break-word;
+    text-shadow:
+      0 0 6px rgba(255, 245, 210, 0.5),
+      0 1px 3px rgba(139, 107, 46, 0.25);
+    transition: color 0.005s linear, text-shadow 0.005s linear;
+  }
+
+  .blessing.rising {
+    animation: floatUp 8s linear forwards;
+  }
+
+  /* 到中央：瞬间变大 + 全部文字变亮 */
+  .blessing.center {
+    filter: brightness(1.3) saturate(1.2);
+  }
+  .blessing.center .name {
+    color: #ffe9a3;
+    text-shadow:
+      0 0 20px rgba(255, 215, 100, 1),
+      0 0 45px rgba(255, 230, 160, 0.95),
+      0 0 80px rgba(255, 245, 210, 0.6),
+      0 2px 6px rgba(139, 107, 46, 0.4);
+  }
+  .blessing.center .msg {
+    color: #8b6b2e;
+    text-shadow:
+      0 0 18px rgba(255, 230, 160, 1),
+      0 0 40px rgba(255, 245, 210, 0.85),
+      0 0 70px rgba(255, 250, 230, 0.55),
+      0 2px 5px rgba(139, 107, 46, 0.35);
+  }
+
+  @keyframes floatUp {
+    0%   { bottom: -180px; opacity: 0; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { bottom: 112%; opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 🏔 山水画背景 -->
+<div id="landscape">
+  <img class="painting" src="background.gif" alt="山水画">
+  <div class="overlay"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+</div>
+
+<!-- 金粉 -->
+<div id="goldDust"></div>
+
+<!-- 祥雪 -->
+<div id="snowLayer"></div>
+
+<!-- 顶部标题 -->
+<div id="title">
+  <div class="line1">謝謝大家蒞臨</div>
+  <div class="line2">聖德安座設壇</div>
+</div>
+
+<!-- 主体 -->
+<div id="main">
+  <div id="video-area">
+    <div id="video-frame">
+      <iframe
+        src="https://www.youtube.com/embed/h1H3Ynd4v20?autoplay=1&mute=1&loop=1&playlist=h1H3Ynd4v20&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&playsinline=1"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+  <div id="stage"></div>
+</div>
+
+<script>
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINVU6wcYbYDGsi0XZEeaDQ4OHrIeE3h5ztp9t4MJ1hTK2sL7DMoLcg67qfXJdMj6aCRRDomEaOPKr/pub?gid=0&single=true&output=csv";
+  const NAME_COL = 0;
+  const MSG_COL = 1;
+  const INTERVAL = 3000;
+  const ANIM_DURATION = 8000;
+  const CENTER_START = 3200;
+  const CENTER_END   = 5200;
+  const REFRESH_EVERY = 10;
+
+  /* ❄ 祥雪 */
+  (function createSnow() {
+    const layer = document.getElementById("snowLayer");
+    const COUNT = 25;
+    const shapes = ["❄", "❅", "❆", "✻", "✼", "•", "◦"];
+    for (let i = 0; i < COUNT; i++) {
+      const s = document.createElement("span");
+      s.className = "snowflake";
+      s.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+      const size = 8 + Math.random() * 18;
+      s.style.fontSize = size + "px";
+      s.style.left = Math.random() * 100 + "vw";
+      const dur = 14 + Math.random() * 18;
+      s.style.animationDuration = dur + "s";
+      s.style.animationDelay = (-Math.random() * dur) + "s";
+      s.style.setProperty("--drift", ((Math.random() - 0.5) * 160) + "px");
+      s.style.setProperty("--maxOp", (0.3 + Math.random() * 0.5).toFixed(2));
+      layer.appendChild(s);
+    }
+  })();
+
+  /* ✨ 金粉 */
+  (function createDust() {
+    const container = document.getElementById("goldDust");
+    const COUNT = 40;
+    for (let i = 0; i < COUNT; i++) {
+      const d = document.createElement("div");
+      d.className = "dust";
+      d.style.left = Math.random() * 100 + "vw";
+      d.style.width = d.style.height = (3 + Math.random() * 5) + "px";
+      d.style.animationDuration = (10 + Math.random() * 12) + "s";
+      d.style.animationDelay = (-Math.random() * 20) + "s";
+      d.style.setProperty("--drift", ((Math.random() - 0.5) * 120) + "px");
+      container.appendChild(d);
+    }
+  })();
+
+  /* 墨点 */
+  (function createInk() {
+    const landscape = document.getElementById("landscape");
+    const COUNT = 15;
+    for (let i = 0; i < COUNT; i++) {
+      const d = document.createElement("div");
+      d.className = "ink";
+      const size = 4 + Math.random() * 10;
+      d.style.width = d.style.height = size + "px";
+      d.style.left = Math.random() * 100 + "vw";
+      d.style.animationDuration = (18 + Math.random() * 18) + "s";
+      d.style.animationDelay = (-Math.random() * 30) + "s";
+      d.style.setProperty("--drift", ((Math.random() - 0.5) * 200) + "px");
+      landscape.appendChild(d);
+    }
+  })();
+
+  /* 祝福滚动 */
+  const stage = document.getElementById("stage");
+  let data = [];
+  let index = 0;
+
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = "", inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else inQuotes = false;
+        } else field += c;
+      } else {
+        if (c === '"') inQuotes = true;
+        else if (c === ',') { row.push(field); field = ""; }
+        else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ""; }
+        else if (c === '\r') { }
+        else field += c;
+      }
+    }
+    if (field !== "" || row.length > 0) { row.push(field); rows.push(row); }
+    return rows.filter(r => r.some(cell => cell.trim() !== ""));
+  }
+
+  async function loadData() {
+    try {
+      const res = await fetch(CSV_URL + "&t=" + Date.now());
+      const text = await res.text();
+      const rows = parseCSV(text);
+      data = rows.slice(1).map(r => ({
+        name: (r[NAME_COL] || "").trim(),
+        msg: (r[MSG_COL] || "").trim()
+      })).filter(d => d.name || d.msg);
+      console.log("已加载数据:", data.length, "条");
+    } catch (e) {
+      console.error("加载数据失败:", e);
+    }
+  }
+
+  function showBlessing(item) {
+    const div = document.createElement("div");
+    div.className = "blessing";
+    div.innerHTML = `
+      <div class="name">${escapeHTML(item.name)}</div>
+      <div class="msg">${escapeHTML(item.msg)}</div>
+    `;
+    const offsetX = (Math.random() - 0.5) * 40;
+    div.style.marginLeft = offsetX + "px";
+    stage.appendChild(div);
+
+    requestAnimationFrame(() => div.classList.add("rising"));
+
+    setTimeout(() => { if (div.isConnected) div.classList.add("center"); }, CENTER_START);
+    setTimeout(() => { if (div.isConnected) div.classList.remove("center"); }, CENTER_END);
+    setTimeout(() => div.remove(), ANIM_DURATION + 500);
+  }
+
+  function escapeHTML(s) {
+    return s.replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  async function start() {
+    await loadData();
+    if (data.length === 0) { console.warn("没有数据"); return; }
+    showBlessing(data[index % data.length]);
+    index++;
+    setInterval(() => {
+      if (data.length === 0) return;
+      showBlessing(data[index % data.length]);
+      index++;
+    }, INTERVAL);
+    setInterval(loadData, REFRESH_EVERY * 1000);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) loadData();
+    });
+  }
+
+  start();
+</script>
+
 </body>
 </html>
