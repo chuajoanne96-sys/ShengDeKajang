@@ -112,7 +112,7 @@
   @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
   /* =========================================
-     主体区
+     主体区（左右高度强制一致）
      ========================================= */
   #main {
     flex: 1;
@@ -122,7 +122,7 @@
     padding: 0 24px 24px;
     gap: 22px;
     z-index: 5;
-    align-items: flex-start;      /* 顶部对齐 */
+    align-items: stretch;
   }
 
   /* 🎬 影片区 */
@@ -156,22 +156,22 @@
   }
 
   /* =========================================
-     💬 祝福区（外框完全恢复 + 高度和影片框一致）
+     💬 祝福区（高度跟随影片框）
      ========================================= */
   #stage {
     width: 40%;
-    aspect-ratio: 16 / 9;
+    height: 100%;
     position: relative;
     overflow: hidden;
     border-radius: 20px;
-    padding: 10px;                              /* 和影片框一样的 padding */
-    background: linear-gradient(160deg, rgba(255,252,242,0.55), rgba(240,228,200,0.35));  /* 米色底纹 */
+    padding: 10px;
+    background: linear-gradient(160deg, rgba(255,252,242,0.55), rgba(240,228,200,0.35));
     box-shadow:
-      0 0 0 2px rgba(201,162,39,0.5),          /* 金色边框 */
-      0 0 0 5px rgba(255,252,242,0.6),         /* 米色外框 */
-      0 0 0 6px rgba(201,162,39,0.25),         /* 金色细边 */
-      0 0 30px rgba(212,175,55,0.22),          /* 外发光 */
-      inset 0 0 40px rgba(255,250,235,0.55);   /* 内发光 */
+      0 0 0 2px rgba(201,162,39,0.5),
+      0 0 0 5px rgba(255,252,242,0.6),
+      0 0 0 6px rgba(201,162,39,0.25),
+      0 0 30px rgba(212,175,55,0.22),
+      inset 0 0 40px rgba(255,250,235,0.55);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -187,7 +187,6 @@
     width: 94%;
     pointer-events: none;
     padding: 0; border: none; background: none; box-shadow: none;
-    /* 瞬间变大 + 变亮 */
     transition:
       transform 0.005s linear,
       opacity 0.5s ease,
@@ -197,7 +196,7 @@
 
   .blessing .name {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 2.4em;              /* 一开始就大 */
+    font-size: 2.4em;
     color: #a8843f;
     margin-bottom: 12px;
     font-weight: bold;
@@ -207,7 +206,7 @@
   }
   .blessing .msg {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 2em;                /* 一开始就大 */
+    font-size: 2em;
     color: #5c4a2a;
     line-height: 1.5;
     word-break: break-word;
@@ -217,7 +216,6 @@
 
   .blessing.rising { animation: floatUp 8s linear forwards; }
 
-  /* 到中央：瞬间变大 + 全部文字变亮 */
   .blessing.center {
     filter: brightness(1.35) saturate(1.2);
   }
@@ -269,7 +267,7 @@
   <div id="video-area">
     <div id="video-frame">
       <iframe
-        src="https://www.youtube.com/embed/h1H3Ynd4v20?autoplay=1&mute=1&loop=1&playlist=h1H3Ynd4v20&rel=0"
+        src="https://www.youtube.com/embed/FSZlyqhg1bw?autoplay=1&mute=1&loop=1&playlist=FSZlyqhg1bw&rel=0"
         allow="autoplay; encrypted-media; picture-in-picture"
         allowfullscreen>
       </iframe>
@@ -288,7 +286,6 @@
   const CENTER_END   = 5200;
   const REFRESH_EVERY = 10;
 
-  /* ❄ 祥雪 */
   (function createSnow() {
     const layer = document.getElementById("snowLayer");
     const COUNT = 25;
@@ -309,7 +306,6 @@
     }
   })();
 
-  /* ✨ 金粉 */
   (function createDust() {
     const container = document.getElementById("goldDust");
     const COUNT = 40;
@@ -325,7 +321,6 @@
     }
   })();
 
-  /* 墨点 */
   (function createInk() {
     const landscape = document.getElementById("landscape");
     const COUNT = 15;
@@ -342,7 +337,6 @@
     }
   })();
 
-  /* 祝福滚动 */
   const stage = document.getElementById("stage");
   let data = [];
   let index = 0;
@@ -395,7 +389,6 @@
 
     requestAnimationFrame(() => div.classList.add("rising"));
 
-    // 到中央：瞬间变大 + 全部文字变亮
     setTimeout(() => { if (div.isConnected) div.classList.add("center"); }, CENTER_START);
     setTimeout(() => { if (div.isConnected) div.classList.remove("center"); }, CENTER_END);
     setTimeout(() => div.remove(), ANIM_DURATION + 500);
