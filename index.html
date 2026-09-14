@@ -16,6 +16,7 @@
     background: #f6efdc;
   }
 
+  /* 🏔 山水画背景 */
   #landscape { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
   #landscape .painting {
     position: absolute; inset: 0; width: 100%; height: 100%;
@@ -53,6 +54,7 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 40px)) scale(1); opacity: 0; }
   }
 
+  /* ✨ 金粉 */
   #goldDust { position: fixed; inset: 0; pointer-events: none; z-index: 3; overflow: hidden; }
   .dust {
     position: absolute; top: -20px; width: 6px; height: 6px; border-radius: 50%;
@@ -66,6 +68,7 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 30px)) scale(1); opacity: 0; }
   }
 
+  /* ❄ 祥雪 */
   #snowLayer { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
   .snowflake {
     position: absolute; top: -30px; color: #ffffff;
@@ -79,6 +82,7 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 30px)) rotate(360deg); opacity: 0; }
   }
 
+  /* 顶部标题 */
   #title { width: 100%; text-align: center; padding: 18px 10px 10px; z-index: 10; position: relative; }
   #title::before {
     content: ""; position: absolute; top: 50%; left: 50%;
@@ -108,29 +112,33 @@
   @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
   /* =========================================
-     主体区（左右高度强制一致）
+     主体区（改用 CSS Grid，左右框强制同高）
      ========================================= */
   #main {
     flex: 1;
-    display: flex;
-    overflow: hidden;
-    position: relative;
-    padding: 0 24px 24px;
+    display: grid;
+    grid-template-columns: 3fr 2fr;    /* 左边占 3/5，右边 2/5 */
     gap: 22px;
+    padding: 0 24px 24px;
     z-index: 5;
-    align-items: flex-start;   /* 改成顶部对齐，保证左右框高度一致 */
+    overflow: hidden;
+    /* 关键：两个格子同高，由内容自动撑开 */
+    align-items: stretch;
   }
 
   /* 🎬 影片区 */
   #video-area {
-    width: 60%;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
   }
   #video-frame {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
+    max-height: 100%;
     border-radius: 20px;
     padding: 10px;
     background: linear-gradient(145deg, rgba(255,252,242,0.92), rgba(240,228,200,0.7));
@@ -151,14 +159,12 @@
     background: #000;
   }
 
-  /* 💬 祝福区（外框保留，高度和影片框一致） */
+  /* 💬 祝福区 */
   #stage {
-    width: 40%;
-    aspect-ratio: 16 / 9;
     position: relative;
     overflow: hidden;
     border-radius: 20px;
-    padding: 10px;              /* ← 加 padding，外框高度和影片框完全一致 */
+    padding: 10px;
     background: linear-gradient(160deg, rgba(255,252,242,0.55), rgba(240,228,200,0.35));
     box-shadow:
       0 0 0 2px rgba(201,162,39,0.5),
@@ -169,6 +175,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 0;
+    min-height: 0;
   }
 
   /* 每条祝福：无边框、无底色，只有文字 */
@@ -181,9 +189,14 @@
     width: 94%;
     pointer-events: none;
     padding: 0; border: none; background: none; box-shadow: none;
-    transition: transform 0.005s linear, opacity 0.5s ease, filter 0.005s linear;
+    /* 瞬间变大 + 变亮 */
+    transition:
+      transform 0.005s linear,
+      opacity 0.5s ease,
+      filter 0.005s linear;
     will-change: transform, opacity, filter;
   }
+
   .blessing .name {
     font-family: "STKaiti","KaiTi","楷体",serif;
     font-size: 2.4em;
@@ -203,15 +216,28 @@
     text-shadow: 0 0 6px rgba(255,245,210,0.5), 0 1px 3px rgba(139,107,46,0.25);
     transition: color 0.005s linear, text-shadow 0.005s linear;
   }
+
   .blessing.rising { animation: floatUp 8s linear forwards; }
-  .blessing.center { filter: brightness(1.35) saturate(1.2); }
+
+  /* 到中央：瞬间变大 + 全部文字变亮 */
+  .blessing.center {
+    filter: brightness(1.35) saturate(1.2);
+  }
   .blessing.center .name {
     color: #ffe9a3;
-    text-shadow: 0 0 22px rgba(255,215,100,1), 0 0 50px rgba(255,230,160,0.95), 0 0 90px rgba(255,245,210,0.6), 0 2px 6px rgba(139,107,46,0.4);
+    text-shadow:
+      0 0 22px rgba(255,215,100,1),
+      0 0 50px rgba(255,230,160,0.95),
+      0 0 90px rgba(255,245,210,0.6),
+      0 2px 6px rgba(139,107,46,0.4);
   }
   .blessing.center .msg {
     color: #8b6b2e;
-    text-shadow: 0 0 20px rgba(255,230,160,1), 0 0 44px rgba(255,245,210,0.85), 0 0 80px rgba(255,250,230,0.55), 0 2px 5px rgba(139,107,46,0.35);
+    text-shadow:
+      0 0 20px rgba(255,230,160,1),
+      0 0 44px rgba(255,245,210,0.85),
+      0 0 80px rgba(255,250,230,0.55),
+      0 2px 5px rgba(139,107,46,0.35);
   }
 
   @keyframes floatUp {
@@ -224,6 +250,7 @@
 </head>
 <body>
 
+<!-- 🏔 山水画背景 -->
 <div id="landscape">
   <img class="painting" src="background.gif" alt="山水画">
   <div class="overlay"></div>
@@ -244,7 +271,7 @@
   <div id="video-area">
     <div id="video-frame">
       <iframe
-        src="https://www.youtube.com/embed/h1H3Ynd4v20"
+        src="https://www.youtube.com/embed/h1H3Ynd4v20?autoplay=1&mute=1&loop=1&playlist=h1H3Ynd4v20&controls=0&modestbranding=1&rel=0&playsinline=1"
         allow="autoplay; encrypted-media; picture-in-picture"
         allowfullscreen>
       </iframe>
@@ -263,6 +290,7 @@
   const CENTER_END   = 5200;
   const REFRESH_EVERY = 10;
 
+  /* ❄ 祥雪 */
   (function createSnow() {
     const layer = document.getElementById("snowLayer");
     const COUNT = 25;
@@ -283,6 +311,7 @@
     }
   })();
 
+  /* ✨ 金粉 */
   (function createDust() {
     const container = document.getElementById("goldDust");
     const COUNT = 40;
@@ -298,6 +327,7 @@
     }
   })();
 
+  /* 墨点 */
   (function createInk() {
     const landscape = document.getElementById("landscape");
     const COUNT = 15;
@@ -314,6 +344,7 @@
     }
   })();
 
+  /* 祝福滚动 */
   const stage = document.getElementById("stage");
   let data = [];
   let index = 0;
