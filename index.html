@@ -16,7 +16,6 @@
     background: #f6efdc;
   }
 
-  /* 🏔 山水画背景 */
   #landscape { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
   #landscape .painting {
     position: absolute; inset: 0; width: 100%; height: 100%;
@@ -54,7 +53,6 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 40px)) scale(1); opacity: 0; }
   }
 
-  /* ✨ 金粉 */
   #goldDust { position: fixed; inset: 0; pointer-events: none; z-index: 3; overflow: hidden; }
   .dust {
     position: absolute; top: -20px; width: 6px; height: 6px; border-radius: 50%;
@@ -68,7 +66,6 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 30px)) scale(1); opacity: 0; }
   }
 
-  /* ❄ 祥雪 */
   #snowLayer { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
   .snowflake {
     position: absolute; top: -30px; color: #ffffff;
@@ -82,7 +79,6 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 30px)) rotate(360deg); opacity: 0; }
   }
 
-  /* 顶部标题 */
   #title { width: 100%; text-align: center; padding: 18px 10px 10px; z-index: 10; position: relative; }
   #title::before {
     content: ""; position: absolute; top: 50%; left: 50%;
@@ -111,9 +107,6 @@
   }
   @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
-  /* =========================================
-     主体区（左右高度一致）
-     ========================================= */
   #main {
     flex: 1;
     display: flex;
@@ -125,7 +118,6 @@
     align-items: stretch;
   }
 
-  /* 🎬 影片区 */
   #video-area {
     width: 70%;
     display: flex;
@@ -155,9 +147,6 @@
     background: #000;
   }
 
-  /* =========================================
-     💬 祝福区（高度跟随影片框）
-     ========================================= */
   #stage {
     width: 30%;
     height: 100%;
@@ -177,18 +166,15 @@
     justify-content: center;
   }
 
-  /* 每条祝福：无边框、无底色，只有文字 */
   .blessing {
     position: absolute;
-    left: 50%;
-    bottom: -180px;
+    left: 50%; bottom: -180px;
     transform: translateX(-50%) scale(0.35);
     opacity: 0;
     text-align: center;
     width: 94%;
     pointer-events: none;
     padding: 0; border: none; background: none; box-shadow: none;
-    /* 变亮和变大保持 3 秒 → 用 3s 的过渡 */
     transition:
       transform 3s linear,
       opacity 0.5s ease,
@@ -196,7 +182,6 @@
     will-change: transform, opacity, filter;
   }
 
-  /* 姓名：和「聖德安座設壇」一样大（3em） */
   .blessing .name {
     font-family: "STKaiti","KaiTi","楷体",serif;
     font-size: 3em;
@@ -207,7 +192,6 @@
     text-shadow: 0 0 8px rgba(255,230,160,0.6), 0 2px 4px rgba(139,107,46,0.3);
     transition: color 3s linear, text-shadow 3s linear;
   }
-  /* 祝福语：和「聖德安座設壇」一样大（3em） */
   .blessing .msg {
     font-family: "STKaiti","KaiTi","楷体",serif;
     font-size: 3em;
@@ -220,10 +204,7 @@
 
   .blessing.rising { animation: floatUp 8s linear forwards; }
 
-  /* 到中央：变亮（保持 3 秒后恢复） */
-  .blessing.center {
-    filter: brightness(1.4) saturate(1.25);
-  }
+  .blessing.center { filter: brightness(1.4) saturate(1.25); }
   .blessing.center .name {
     color: #ffe9a3;
     text-shadow:
@@ -251,7 +232,6 @@
 </head>
 <body>
 
-<!-- 🏔 山水画背景 -->
 <div id="landscape">
   <img class="painting" src="background.gif" alt="山水画">
   <div class="overlay"></div>
@@ -282,15 +262,16 @@
 </div>
 
 <script>
-  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINVU6wcYbYDGsi0XZEeaDQ4OHrIeE3h5ztp9t4MJ1hTK2sL7DMoLcg67qfXJdMj6aCRRDomEaOPKr/pub?gid=0&single=true&output=csv";
-  const NAME_COL = 0;
-  const MSG_COL = 1;
+  // ====== 配置区 ======
+  const API_URL = "https://script.google.com/macros/s/AKfycbwyAfmF2qKh0LIuYB8AQX6oqdbdT13uhwV9pmFr_u0Ej-CiVzmF72V7rnjSeP04V6Fx-g/exec";
+  const REFRESH_EVERY = 5;      // 每 5 秒刷新一次
+  // ===================
+
   const INTERVAL = 3000;
   const ANIM_DURATION = 8000;
-  const CENTER_START = 2800;     // 到中央的时间
-  const CENTER_HOLD  = 3000;     // 变亮保持 3 秒
+  const CENTER_START = 2800;
+  const CENTER_HOLD  = 3000;
   const CENTER_END   = CENTER_START + CENTER_HOLD;
-  const REFRESH_EVERY = 10;
 
   (function createSnow() {
     const layer = document.getElementById("snowLayer");
@@ -347,35 +328,11 @@
   let data = [];
   let index = 0;
 
-  function parseCSV(text) {
-    const rows = [];
-    let row = [], field = "", inQuotes = false;
-    for (let i = 0; i < text.length; i++) {
-      const c = text[i];
-      if (inQuotes) {
-        if (c === '"') { if (text[i+1] === '"') { field += '"'; i++; } else inQuotes = false; }
-        else field += c;
-      } else {
-        if (c === '"') inQuotes = true;
-        else if (c === ',') { row.push(field); field = ""; }
-        else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ""; }
-        else if (c === '\r') { }
-        else field += c;
-      }
-    }
-    if (field !== "" || row.length > 0) { row.push(field); rows.push(row); }
-    return rows.filter(r => r.some(cell => cell.trim() !== ""));
-  }
-
   async function loadData() {
     try {
-      const res = await fetch(CSV_URL + "&t=" + Date.now());
-      const text = await res.text();
-      const rows = parseCSV(text);
-      data = rows.slice(1).map(r => ({
-        name: (r[NAME_COL] || "").trim(),
-        msg: (r[MSG_COL] || "").trim()
-      })).filter(d => d.name || d.msg);
+      const res = await fetch(API_URL + "?t=" + Date.now());
+      const json = await res.json();
+      data = json.data || [];
       console.log("已加载数据:", data.length, "条");
     } catch (e) {
       console.error("加载数据失败:", e);
@@ -389,21 +346,17 @@
       <div class="name">${escapeHTML(item.name)}</div>
       <div class="msg">${escapeHTML(item.msg)}</div>
     `;
-    // 不再加随机偏移，全部居中
     stage.appendChild(div);
 
     requestAnimationFrame(() => div.classList.add("rising"));
 
-    // 到中央：变亮
     setTimeout(() => { if (div.isConnected) div.classList.add("center"); }, CENTER_START);
-    // 3 秒后恢复
     setTimeout(() => { if (div.isConnected) div.classList.remove("center"); }, CENTER_END);
-    // 动画结束移除
     setTimeout(() => div.remove(), ANIM_DURATION + 500);
   }
 
   function escapeHTML(s) {
-    return s.replace(/[&<>"']/g, c => ({
+    return String(s).replace(/[&<>"']/g, c => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     }[c]));
   }
