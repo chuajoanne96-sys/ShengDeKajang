@@ -177,19 +177,19 @@
     justify-content: center;
   }
 
-  /* 每条祝福：在画面正中央出现，原地慢慢放大 */
   .blessing {
     position: absolute;
-    left: 50%;
-    top: 50%;                 /* ← 从底部改成中间 */
-    transform: translate(-50%, -50%) scale(0.3);
+    left: 50%; bottom: -180px;
+    transform: translateX(-50%) scale(0.35);
     opacity: 0;
     text-align: center;
     width: 94%;
     pointer-events: none;
     padding: 0; border: none; background: none; box-shadow: none;
-    /* 全程慢慢放大 + 变亮 + 淡出 */
-    animation: centerGrow 7s ease-in-out forwards;
+    transition:
+      transform 0.005s linear,
+      opacity 0.5s ease,
+      filter 0.005s linear;
     will-change: transform, opacity, filter;
   }
 
@@ -201,6 +201,7 @@
     font-weight: bold;
     letter-spacing: 5px;
     text-shadow: 0 0 8px rgba(255,230,160,0.6), 0 2px 4px rgba(139,107,46,0.3);
+    transition: color 0.005s linear, text-shadow 0.005s linear;
   }
   .blessing .msg {
     font-family: "STKaiti","KaiTi","楷体",serif;
@@ -209,40 +210,45 @@
     line-height: 1.5;
     word-break: break-word;
     text-shadow: 0 0 6px rgba(255,245,210,0.5), 0 1px 3px rgba(139,107,46,0.25);
+    transition: color 0.005s linear, text-shadow 0.005s linear;
   }
 
-  /* 关键帧：从中间出现 → 慢慢放大 → 变亮 → 淡出 */
-  @keyframes centerGrow {
-    0% {
-      transform: translate(-50%, -50%) scale(0.3);
-      opacity: 0;
-      filter: brightness(1);
-    }
-    15% {
-      transform: translate(-50%, -50%) scale(0.55);
-      opacity: 0.6;
-      filter: brightness(1.05);
-    }
-    45% {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-      filter: brightness(1.15);
-    }
-    70% {
-      transform: translate(-50%, -50%) scale(1.25);
-      opacity: 1;
-      filter: brightness(1.35) saturate(1.2);
-    }
-    100% {
-      transform: translate(-50%, -50%) scale(1.45);
-      opacity: 0;
-      filter: brightness(1.45) saturate(1.25);
-    }
+  /* ⬇️ 上升动画：从 8s 改成 12s，慢一点 */
+  .blessing.rising {
+    animation: floatUp 12s linear forwards;
+  }
+
+  .blessing.center {
+    filter: brightness(1.35) saturate(1.2);
+  }
+  .blessing.center .name {
+    color: #ffe9a3;
+    text-shadow:
+      0 0 22px rgba(255,215,100,1),
+      0 0 50px rgba(255,230,160,0.95),
+      0 0 90px rgba(255,245,210,0.6),
+      0 2px 6px rgba(139,107,46,0.4);
+  }
+  .blessing.center .msg {
+    color: #8b6b2e;
+    text-shadow:
+      0 0 20px rgba(255,230,160,1),
+      0 0 44px rgba(255,245,210,0.85),
+      0 0 80px rgba(255,250,230,0.55),
+      0 2px 5px rgba(139,107,46,0.35);
+  }
+
+  @keyframes floatUp {
+    0%   { bottom: -180px; opacity: 0; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { bottom: 112%; opacity: 0; }
   }
 </style>
 </head>
 <body>
 
+<!-- 🏔 山水画背景 -->
 <div id="landscape">
   <img class="painting" src="background.gif" alt="山水画">
   <div class="overlay"></div>
@@ -276,8 +282,10 @@
   const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINVU6wcYbYDGsi0XZEeaDQ4OHrIeE3h5ztp9t4MJ1hTK2sL7DMoLcg67qfXJdMj6aCRRDomEaOPKr/pub?gid=0&single=true&output=csv";
   const NAME_COL = 0;
   const MSG_COL = 1;
-  const INTERVAL = 4000;          // 每 4 秒一条（因为动画更长）
-  const ANIM_DURATION = 7000;     // 动画时长 7 秒
+  const INTERVAL = 3000;
+  const ANIM_DURATION = 12000;   /* ← 从 8000 改成 12000，和 CSS 的 12s 一致 */
+  const CENTER_START = 4800;     /* ← 12s 的 40% */
+  const CENTER_END   = 7800;     /* ← 12s 的 65% */
   const REFRESH_EVERY = 10;
 
   (function createSnow() {
@@ -377,9 +385,14 @@
       <div class="name">${escapeHTML(item.name)}</div>
       <div class="msg">${escapeHTML(item.msg)}</div>
     `;
+    const offsetX = (Math.random() - 0.5) * 40;
+    div.style.marginLeft = offsetX + "px";
     stage.appendChild(div);
 
-    // 动画结束后移除
+    requestAnimationFrame(() => div.classList.add("rising"));
+
+    setTimeout(() => { if (div.isConnected) div.classList.add("center"); }, CENTER_START);
+    setTimeout(() => { if (div.isConnected) div.classList.remove("center"); }, CENTER_END);
     setTimeout(() => div.remove(), ANIM_DURATION + 500);
   }
 
