@@ -16,445 +16,299 @@
     background: #f6efdc;
   }
 
-  /* =========================================
-     🏔 山水画背景层
-     ========================================= */
-  #landscape {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
+  /* 🏔 山水画背景 */
+  #landscape { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  #landscape .painting {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.85;
+    animation: paintingBreath 40s ease-in-out infinite alternate;
+  }
+  @keyframes paintingBreath {
+    0%   { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.04) translate(-0.6%, -0.6%); }
+  }
+  #landscape .overlay {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 40%, rgba(253, 248, 232, 0.25) 0%, rgba(246, 239, 220, 0.35) 55%, rgba(236, 223, 192, 0.4) 100%);
     pointer-events: none;
   }
-
-  #landscape .sky {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 50% 30%, #fdf8e8 0%, #f6efdc 45%, #ecdfc0 100%);
-  }
-
-  #landscape .mountain-far {
-    position: absolute;
-    left: -10%;
-    bottom: 0;
-    width: 120%;
-    height: 55%;
-    background:
-      radial-gradient(ellipse at 20% 100%, rgba(140, 120, 80, 0.18) 0%, transparent 55%),
-      radial-gradient(ellipse at 45% 100%, rgba(140, 120, 80, 0.22) 0%, transparent 60%),
-      radial-gradient(ellipse at 70% 100%, rgba(140, 120, 80, 0.2) 0%, transparent 55%),
-      radial-gradient(ellipse at 90% 100%, rgba(140, 120, 80, 0.16) 0%, transparent 50%);
-    animation: driftFar 40s ease-in-out infinite alternate;
-  }
-  #landscape .mountain-mid {
-    position: absolute;
-    left: -15%;
-    bottom: 0;
-    width: 130%;
-    height: 42%;
-    background:
-      radial-gradient(ellipse at 15% 100%, rgba(90, 75, 45, 0.28) 0%, transparent 55%),
-      radial-gradient(ellipse at 38% 100%, rgba(90, 75, 45, 0.32) 0%, transparent 60%),
-      radial-gradient(ellipse at 62% 100%, rgba(90, 75, 45, 0.3) 0%, transparent 55%),
-      radial-gradient(ellipse at 85% 100%, rgba(90, 75, 45, 0.26) 0%, transparent 55%);
-    animation: driftMid 32s ease-in-out infinite alternate;
-  }
-  #landscape .mountain-near {
-    position: absolute;
-    left: -10%;
-    bottom: 0;
-    width: 120%;
-    height: 28%;
-    background:
-      radial-gradient(ellipse at 25% 100%, rgba(60, 50, 30, 0.32) 0%, transparent 60%),
-      radial-gradient(ellipse at 55% 100%, rgba(60, 50, 30, 0.35) 0%, transparent 65%),
-      radial-gradient(ellipse at 80% 100%, rgba(60, 50, 30, 0.3) 0%, transparent 55%);
-    animation: driftNear 26s ease-in-out infinite alternate;
-  }
-
-  @keyframes driftFar {
-    0%   { transform: translateX(-2%) translateY(0); }
-    100% { transform: translateX(2%) translateY(-6px); }
-  }
-  @keyframes driftMid {
-    0%   { transform: translateX(2%) translateY(0); }
-    100% { transform: translateX(-2%) translateY(-4px); }
-  }
-  @keyframes driftNear {
-    0%   { transform: translateX(-1%) translateY(0); }
-    100% { transform: translateX(1%) translateY(-3px); }
-  }
-
-  /* 云雾 */
   #landscape .cloud {
-    position: absolute;
-    border-radius: 50%;
+    position: absolute; border-radius: 50%;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.35) 40%, transparent 75%);
-    filter: blur(20px);
-    pointer-events: none;
+    filter: blur(20px); pointer-events: none;
   }
   #landscape .c1 { top: 20%; left: -20%; width: 60%; height: 22%; animation: cloudDrift1 55s linear infinite; }
   #landscape .c2 { top: 40%; left: -30%; width: 70%; height: 26%; animation: cloudDrift2 70s linear infinite; opacity: 0.7; }
   #landscape .c3 { top: 60%; left: -25%; width: 65%; height: 22%; animation: cloudDrift3 85s linear infinite; opacity: 0.6; }
-
-  @keyframes cloudDrift1 {
-    0%   { transform: translateX(0) translateY(0); }
-    100% { transform: translateX(120vw) translateY(-15px); }
-  }
-  @keyframes cloudDrift2 {
-    0%   { transform: translateX(0) translateY(0); }
-    100% { transform: translateX(120vw) translateY(10px); }
-  }
-  @keyframes cloudDrift3 {
-    0%   { transform: translateX(0) translateY(0); }
-    100% { transform: translateX(120vw) translateY(-8px); }
-  }
-
-  /* 墨点 */
+  @keyframes cloudDrift1 { 0%{transform:translateX(0) translateY(0);} 100%{transform:translateX(120vw) translateY(-15px);} }
+  @keyframes cloudDrift2 { 0%{transform:translateX(0) translateY(0);} 100%{transform:translateX(120vw) translateY(10px);} }
+  @keyframes cloudDrift3 { 0%{transform:translateX(0) translateY(0);} 100%{transform:translateX(120vw) translateY(-8px);} }
   #landscape .ink {
-    position: absolute;
-    top: -20px;
-    border-radius: 50%;
+    position: absolute; top: -20px; border-radius: 50%;
     background: radial-gradient(circle, rgba(80, 65, 40, 0.35) 0%, rgba(80, 65, 40, 0) 70%);
-    animation: inkFall linear infinite;
-    opacity: 0;
+    animation: inkFall linear infinite; opacity: 0;
   }
   @keyframes inkFall {
-    0%   { transform: translateY(-20px) translateX(0) scale(0.6); opacity: 0; }
-    10%  { opacity: 0.8; }
-    90%  { opacity: 0.5; }
+    0% { transform: translateY(-20px) translateX(0) scale(0.6); opacity: 0; }
+    10% { opacity: 0.8; } 90% { opacity: 0.5; }
     100% { transform: translateY(110vh) translateX(var(--drift, 40px)) scale(1); opacity: 0; }
   }
 
-  /* 水面 */
-  #landscape .water {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 12%;
-    background:
-      repeating-linear-gradient(
-        0deg,
-        rgba(120, 100, 60, 0.08) 0px,
-        rgba(120, 100, 60, 0.08) 1px,
-        transparent 1px,
-        transparent 10px
-      );
-    animation: waterShimmer 8s ease-in-out infinite alternate;
-  }
-  @keyframes waterShimmer {
-    0%   { opacity: 0.6; transform: translateY(0); }
-    100% { opacity: 1; transform: translateY(-3px); }
-  }
-
-  /* =========================================
-     ☁ 四角祥云（替换原圆环）
-     用径向渐变拼出卷曲云头
-     ========================================= */
-  body::before,
-  body::after {
-    content: "";
-    position: fixed;
-    width: 300px;
-    height: 200px;
-    pointer-events: none;
-    z-index: 4;
-    opacity: 0.85;
-    /* 用多层径向渐变勾勒祥云轮廓：云头 + 云尾 */
-    background:
-      radial-gradient(circle at 60px 90px, rgba(201, 162, 39, 0.45) 0%, rgba(201, 162, 39, 0.45) 40px, transparent 42px),
-      radial-gradient(circle at 130px 70px, rgba(201, 162, 39, 0.5) 0%, rgba(201, 162, 39, 0.5) 50px, transparent 52px),
-      radial-gradient(circle at 200px 95px, rgba(201, 162, 39, 0.42) 0%, rgba(201, 162, 39, 0.42) 42px, transparent 44px),
-      radial-gradient(circle at 90px 130px, rgba(201, 162, 39, 0.4) 0%, rgba(201, 162, 39, 0.4) 35px, transparent 37px),
-      radial-gradient(circle at 170px 130px, rgba(201, 162, 39, 0.4) 0%, rgba(201, 162, 39, 0.4) 38px, transparent 40px),
-      radial-gradient(circle at 30px 110px, rgba(201, 162, 39, 0.35) 0%, rgba(201, 162, 39, 0.35) 25px, transparent 27px);
-    animation: cloudBreath 8s ease-in-out infinite;
-    /* 用 mask 让云更柔和 */
-    -webkit-mask-image: radial-gradient(ellipse at center, #000 55%, transparent 80%);
-            mask-image: radial-gradient(ellipse at center, #000 55%, transparent 80%);
-  }
-  body::before { top: 10px; left: 10px; }
-  body::after  { bottom: 10px; right: 10px; transform: rotate(180deg); animation-delay: 4s; }
-
-  @keyframes cloudBreath {
-    0%, 100% { opacity: 0.55; filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.4)); }
-    50%      { opacity: 0.95; filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.85)); }
-  }
-
-  /* =========================================
-     ✨ 金粉层
-     ========================================= */
-  #goldDust {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 3;
-    overflow: hidden;
-  }
+  /* ✨ 金粉 */
+  #goldDust { position: fixed; inset: 0; pointer-events: none; z-index: 3; overflow: hidden; }
   .dust {
-    position: absolute;
-    top: -20px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+    position: absolute; top: -20px; width: 6px; height: 6px; border-radius: 50%;
     background: radial-gradient(circle, #fff6c9 0%, #ffd966 40%, rgba(212, 175, 55, 0) 70%);
     box-shadow: 0 0 8px rgba(255, 215, 100, 0.9);
-    animation: fall linear infinite;
-    opacity: 0;
+    animation: fall linear infinite; opacity: 0;
   }
   @keyframes fall {
-    0%   { transform: translateY(-20px) translateX(0) scale(0.6); opacity: 0; }
-    10%  { opacity: 0.9; }
-    90%  { opacity: 0.7; }
+    0% { transform: translateY(-20px) translateX(0) scale(0.6); opacity: 0; }
+    10% { opacity: 0.9; } 90% { opacity: 0.7; }
     100% { transform: translateY(110vh) translateX(var(--drift, 30px)) scale(1); opacity: 0; }
   }
 
-  /* =========================================
-     顶部标题（古风 + 气派）
-     ========================================= */
-  #title {
-    width: 100%;
-    text-align: center;
-    padding: 24px 10px 18px;
-    z-index: 10;
-    position: relative;
+  /* ❄ 祥雪 */
+  #snowLayer { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+  .snowflake {
+    position: absolute; top: -30px; color: #ffffff;
+    user-select: none; pointer-events: none;
+    text-shadow: 0 0 6px rgba(255,255,255,0.9), 0 0 12px rgba(200,220,255,0.6);
+    animation: snowFall linear infinite; opacity: 0;
+  }
+  @keyframes snowFall {
+    0% { transform: translateY(-30px) translateX(0) rotate(0deg); opacity: 0; }
+    8% { opacity: var(--maxOp, 0.9); } 90% { opacity: var(--maxOp, 0.9); }
+    100% { transform: translateY(110vh) translateX(var(--drift, 30px)) rotate(360deg); opacity: 0; }
   }
 
-  /* 标题背景柔光 */
+  /* 顶部标题 */
+  #title { width: 100%; text-align: center; padding: 18px 10px 10px; z-index: 10; position: relative; }
   #title::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 800px;
-    height: 220px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(ellipse, rgba(255, 245, 210, 0.7) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: -1;
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: 900px; height: 200px; transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse, rgba(255, 245, 210, 0.75) 0%, transparent 70%);
+    pointer-events: none; z-index: -1;
   }
-
   #title .line1 {
-    font-family: "STKaiti", "KaiTi", "楷体", serif;
-    font-size: 1.7em;
-    letter-spacing: 14px;
-    color: #8b6b2e;
-    margin-bottom: 10px;
-    text-shadow: 0 1px 2px rgba(139, 107, 46, 0.3);
-    position: relative;
-    display: inline-block;
+    font-family: "STKaiti","KaiTi","楷体",serif;
+    font-size: 1.4em; letter-spacing: 12px; color: #8b6b2e; margin-bottom: 4px;
+    text-shadow: 0 1px 3px rgba(139, 107, 46, 0.3);
   }
-  /* 第一行两侧小云纹装饰 */
-  #title .line1::before,
-  #title .line1::after {
-    content: "❋";
-    color: rgba(201, 162, 39, 0.75);
-    font-size: 0.8em;
-    vertical-align: middle;
-    margin: 0 18px;
-    text-shadow: 0 0 8px rgba(212, 175, 55, 0.7);
-  }
-
   #title .line2 {
-    font-family: "STKaiti", "KaiTi", "楷体", "STSong", "宋体", serif;
-    font-size: 3.4em;
-    letter-spacing: 22px;
-    font-weight: bold;
-    color: #6e4f18;
-    padding-left: 22px; /* 补偿字间距导致的视觉偏移 */
-    text-shadow:
-      0 0 22px rgba(212, 175, 55, 0.85),
-      0 0 45px rgba(255, 230, 160, 0.6),
-      0 3px 6px rgba(110, 79, 24, 0.35);
-    position: relative;
+    font-family: "STKaiti","KaiTi","楷体","STSong","宋体",serif;
+    font-size: 3em; letter-spacing: 18px; font-weight: bold; color: #6e4f18;
+    padding-left: 18px;
+    text-shadow: 0 0 20px rgba(212,175,55,0.85), 0 0 40px rgba(255,230,160,0.5), 0 3px 6px rgba(110,79,24,0.35);
     display: inline-block;
   }
-
-  /* 标题下方双线 + 篆刻感小方块 */
   #title::after {
-    content: "❖";
-    display: block;
-    color: #c9a227;
-    font-size: 0.9em;
-    margin: 14px auto 0;
-    width: 320px;
-    height: auto;
-    text-align: center;
-    letter-spacing: 6px;
-    background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.5), transparent);
-    background-size: 100% 1px;
-    background-position: center 16px;
-    background-repeat: no-repeat;
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.9);
-    animation: sealGlow 3s ease-in-out infinite;
+    content: ""; display: block; width: 260px; height: 2px; margin: 10px auto 0;
+    background: linear-gradient(90deg, transparent, #c9a227, #ffe9a3, #d4af37, #c9a227, transparent);
+    background-size: 200% 100%;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+    animation: shimmer 4s linear infinite;
   }
-
-  @keyframes sealGlow {
-    0%, 100% { text-shadow: 0 0 8px rgba(212, 175, 55, 0.7); }
-    50%      { text-shadow: 0 0 22px rgba(212, 175, 55, 1); }
-  }
+  @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
   /* =========================================
-     主体区
+     主体区：一个大框，左边影片、右边祝福
      ========================================= */
   #main {
     flex: 1;
     display: flex;
     overflow: hidden;
     position: relative;
-    padding: 0 24px 24px;
-    gap: 22px;
+    padding: 0 30px 30px;
     z-index: 5;
+    align-items: center;
+    justify-content: center;
   }
 
-  #video-area {
-    width: 60%;
+  /* 一个大框，包住左影片 + 右祝福 */
+  #panel {
+    position: relative;
+    width: 100%;
     height: 100%;
+    max-width: 1700px;
+    max-height: 700px;
+    display: flex;
+    border-radius: 22px;
+    padding: 14px;
+    background: linear-gradient(145deg, rgba(255,252,242,0.85), rgba(240,228,200,0.55));
+    box-shadow:
+      0 0 0 2px rgba(201,162,39,0.6),
+      0 0 0 6px rgba(255,252,242,0.55),
+      0 0 0 7px rgba(201,162,39,0.3),
+      0 0 45px rgba(212,175,55,0.4),
+      inset 0 0 40px rgba(255,250,235,0.7);
+  }
+
+  /* 🎬 左：影片区 */
+  #video-area {
+    flex: 3;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    border-radius: 20px;
-    padding: 12px;
-    background: linear-gradient(145deg, rgba(255, 252, 242, 0.92), rgba(240, 228, 200, 0.7));
-    box-shadow:
-      0 0 0 2px rgba(201, 162, 39, 0.55),
-      0 0 0 5px rgba(255, 252, 242, 0.6),
-      0 0 0 6px rgba(201, 162, 39, 0.25),
-      0 0 35px rgba(212, 175, 55, 0.35),
-      inset 0 0 30px rgba(255, 250, 235, 0.7);
+    min-width: 0;
+    padding-right: 14px;
   }
-  #video-area video {
-    width: 100%; height: 100%;
-    object-fit: contain;
-    border-radius: 12px;
+  #video-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #000;
+    box-shadow:
+      0 0 0 1px rgba(201,162,39,0.55),
+      0 0 25px rgba(212,175,55,0.3);
+  }
+  #video-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 
+  /* 竖直金色分割线 */
+  #divider {
+    width: 2px;
+    background: linear-gradient(180deg, transparent, #d4af37, #ffe9a3, #d4af37, transparent);
+    box-shadow: 0 0 12px rgba(212,175,55,0.8);
+    margin: 10px 0;
+    flex-shrink: 0;
+  }
+
+  /* 💬 右：祝福区 */
   #stage {
-    width: 40%;
-    height: 100%;
+    flex: 2;
     position: relative;
     overflow: hidden;
-    border-radius: 20px;
-    background: linear-gradient(160deg, rgba(255, 252, 242, 0.82), rgba(240, 228, 200, 0.55));
-    box-shadow:
-      0 0 0 2px rgba(201, 162, 39, 0.5),
-      0 0 0 5px rgba(255, 252, 242, 0.6),
-      0 0 0 6px rgba(201, 162, 39, 0.25),
-      0 0 30px rgba(212, 175, 55, 0.22),
-      inset 0 0 40px rgba(255, 250, 235, 0.55);
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 14px;
   }
 
+  /* 中间两条金色横线（装饰） */
+  #stage::before,
+  #stage::after {
+    content: "";
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #d4af37, #ffe9a3, #d4af37, transparent);
+    box-shadow: 0 0 10px rgba(212,175,55,0.7);
+    pointer-events: none;
+  }
+  #stage::before { top: calc(50% - 80px); }
+  #stage::after  { bottom: calc(50% - 80px); }
+
+  /* 每条祝福：无边框、无底色，只有文字 */
   .blessing {
     position: absolute;
-    left: 50%;
-    bottom: -180px;
+    left: 50%; bottom: -180px;
     transform: translateX(-50%) scale(0.35);
     opacity: 0;
     text-align: center;
-    width: 88%;
+    width: 94%;
     pointer-events: none;
-    padding: 16px 20px;
-    border-radius: 16px;
-    border: 2px solid rgba(201, 162, 39, 0.45);
-    background: linear-gradient(160deg, rgba(255, 253, 246, 0.95), rgba(250, 242, 220, 0.88));
+    padding: 0; border: none; background: none; box-shadow: none;
     transition:
-      transform 0.9s ease,
-      box-shadow 0.9s ease,
-      border-color 0.9s ease,
-      background 0.9s ease,
-      opacity 0.9s ease;
-    box-shadow:
-      0 2px 10px rgba(139, 107, 46, 0.15),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+      transform 0.005s linear,
+      opacity 0.5s ease,
+      filter 0.005s linear;
+    will-change: transform, opacity, filter;
   }
-  .blessing::before {
-    content: "";
-    position: absolute;
-    inset: 5px;
-    border-radius: 11px;
-    border: 1px solid rgba(201, 162, 39, 0.4);
-    pointer-events: none;
-  }
+
   .blessing .name {
-    font-family: "STKaiti", "KaiTi", "楷体", serif;
-    font-size: 1.2em;
+    font-family: "STKaiti","KaiTi","楷体",serif;
+    font-size: 2.4em;
     color: #a8843f;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
     font-weight: bold;
-    letter-spacing: 3px;
-    position: relative;
+    letter-spacing: 5px;
+    text-shadow: 0 0 8px rgba(255,230,160,0.6), 0 2px 4px rgba(139,107,46,0.3);
+    transition: color 0.005s linear, text-shadow 0.005s linear;
   }
   .blessing .msg {
-    font-family: "STKaiti", "KaiTi", "楷体", serif;
-    font-size: 1.05em;
+    font-family: "STKaiti","KaiTi","楷体",serif;
+    font-size: 2em;
     color: #5c4a2a;
-    line-height: 1.6;
+    line-height: 1.5;
     word-break: break-word;
-    position: relative;
+    text-shadow: 0 0 6px rgba(255,245,210,0.5), 0 1px 3px rgba(139,107,46,0.25);
+    transition: color 0.005s linear, text-shadow 0.005s linear;
   }
 
-  .blessing.rising {
-    animation: floatUp 8s linear forwards;
-  }
+  .blessing.rising { animation: floatUp 8s linear forwards; }
 
   .blessing.center {
-    transform: translateX(-50%) scale(1.5);
-    border-color: #e6c34a;
-    background: linear-gradient(160deg, rgba(255, 255, 250, 1), rgba(255, 248, 225, 0.98));
-    box-shadow:
-      0 0 35px rgba(212, 175, 55, 0.9),
-      0 0 70px rgba(212, 175, 55, 0.45),
-      inset 0 0 22px rgba(255, 245, 210, 0.9);
+    filter: brightness(1.35) saturate(1.2);
   }
-  .blessing.center::before {
-    border-color: rgba(230, 195, 74, 0.85);
-    box-shadow: inset 0 0 10px rgba(230, 195, 74, 0.45);
+  .blessing.center .name {
+    color: #ffe9a3;
+    text-shadow:
+      0 0 22px rgba(255,215,100,1),
+      0 0 50px rgba(255,230,160,0.95),
+      0 0 90px rgba(255,245,210,0.6),
+      0 2px 6px rgba(139,107,46,0.4);
+  }
+  .blessing.center .msg {
+    color: #8b6b2e;
+    text-shadow:
+      0 0 20px rgba(255,230,160,1),
+      0 0 44px rgba(255,245,210,0.85),
+      0 0 80px rgba(255,250,230,0.55),
+      0 2px 5px rgba(139,107,46,0.35);
   }
 
   @keyframes floatUp {
     0%   { bottom: -180px; opacity: 0; }
-    15%  { opacity: 1; }
-    40%  { bottom: 40%; opacity: 1; }
-    62%  { bottom: 43%; opacity: 1; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
     100% { bottom: 112%; opacity: 0; }
   }
 </style>
 </head>
 <body>
 
-<!-- 山水画背景 -->
+<!-- 🏔 山水画背景 -->
 <div id="landscape">
-  <div class="sky"></div>
-  <div class="mountain-far"></div>
+  <img class="painting" src="background.gif" alt="山水画">
+  <div class="overlay"></div>
   <div class="cloud c1"></div>
-  <div class="mountain-mid"></div>
   <div class="cloud c2"></div>
-  <div class="mountain-near"></div>
   <div class="cloud c3"></div>
-  <div class="water"></div>
 </div>
 
-<!-- 金粉 -->
 <div id="goldDust"></div>
+<div id="snowLayer"></div>
 
-<!-- 顶部标题（古风气派） -->
 <div id="title">
   <div class="line1">謝謝大家蒞臨</div>
   <div class="line2">聖德安座設壇</div>
 </div>
 
-<!-- 主体 -->
 <div id="main">
-  <div id="video-area">
-    <video autoplay muted loop playsinline>
-      <source src="your-video.mp4" type="video/mp4">
-      你的浏览器不支持 HTML5 影片。
-    </video>
+  <div id="panel">
+    <div id="video-area">
+      <div id="video-frame">
+        <iframe
+          src="https://www.youtube.com/embed/h1H3Ynd4v20?autoplay=1&mute=1&loop=1&playlist=h1H3Ynd4v20&controls=0&modestbranding=1&rel=0&playsinline=1"
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+    <div id="divider"></div>
+    <div id="stage"></div>
   </div>
-  <div id="stage"></div>
 </div>
 
 <script>
@@ -465,6 +319,27 @@
   const ANIM_DURATION = 8000;
   const CENTER_START = 3200;
   const CENTER_END   = 5200;
+  const REFRESH_EVERY = 10;
+
+  (function createSnow() {
+    const layer = document.getElementById("snowLayer");
+    const COUNT = 25;
+    const shapes = ["❄", "❅", "❆", "✻", "✼", "•", "◦"];
+    for (let i = 0; i < COUNT; i++) {
+      const s = document.createElement("span");
+      s.className = "snowflake";
+      s.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+      const size = 8 + Math.random() * 18;
+      s.style.fontSize = size + "px";
+      s.style.left = Math.random() * 100 + "vw";
+      const dur = 14 + Math.random() * 18;
+      s.style.animationDuration = dur + "s";
+      s.style.animationDelay = (-Math.random() * dur) + "s";
+      s.style.setProperty("--drift", ((Math.random() - 0.5) * 160) + "px");
+      s.style.setProperty("--maxOp", (0.3 + Math.random() * 0.5).toFixed(2));
+      layer.appendChild(s);
+    }
+  })();
 
   (function createDust() {
     const container = document.getElementById("goldDust");
@@ -507,10 +382,8 @@
     for (let i = 0; i < text.length; i++) {
       const c = text[i];
       if (inQuotes) {
-        if (c === '"') {
-          if (text[i + 1] === '"') { field += '"'; i++; }
-          else inQuotes = false;
-        } else field += c;
+        if (c === '"') { if (text[i+1] === '"') { field += '"'; i++; } else inQuotes = false; }
+        else field += c;
       } else {
         if (c === '"') inQuotes = true;
         else if (c === ',') { row.push(field); field = ""; }
@@ -572,7 +445,10 @@
       showBlessing(data[index % data.length]);
       index++;
     }, INTERVAL);
-    setInterval(loadData, 30000);
+    setInterval(loadData, REFRESH_EVERY * 1000);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) loadData();
+    });
   }
 
   start();
