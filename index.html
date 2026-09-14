@@ -125,7 +125,6 @@
     justify-content: center;
   }
 
-  /* 一个大框，包住左影片 + 右祝福 */
   #panel {
     position: relative;
     width: 100%;
@@ -144,9 +143,9 @@
       inset 0 0 40px rgba(255,250,235,0.7);
   }
 
-  /* 🎬 左：影片区 */
+  /* 🎬 左：影片区（变大了） */
   #video-area {
-    flex: 3;
+    flex: 4;                     /* ← 原来是 3，现在 4，影片更大 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -182,9 +181,9 @@
     flex-shrink: 0;
   }
 
-  /* 💬 右：祝福区 */
+  /* 💬 右：祝福区（变短了） */
   #stage {
-    flex: 2;
+    flex: 2;                     /* ← 保持 2，因为影片变 4，祝福相对更短 */
     position: relative;
     overflow: hidden;
     min-width: 0;
@@ -194,7 +193,6 @@
     padding-left: 14px;
   }
 
-  /* 中间两条金色横线（装饰） */
   #stage::before,
   #stage::after {
     content: "";
@@ -209,7 +207,7 @@
   #stage::before { top: calc(50% - 80px); }
   #stage::after  { bottom: calc(50% - 80px); }
 
-  /* 每条祝福：无边框、无底色，只有文字 */
+  /* 每条祝福 */
   .blessing {
     position: absolute;
     left: 50%; bottom: -180px;
@@ -278,7 +276,6 @@
 </head>
 <body>
 
-<!-- 🏔 山水画背景 -->
 <div id="landscape">
   <img class="painting" src="background.gif" alt="山水画">
   <div class="overlay"></div>
