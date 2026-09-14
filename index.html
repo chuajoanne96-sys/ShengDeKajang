@@ -112,102 +112,72 @@
   @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
   /* =========================================
-     主体区：一个大框，左边影片、右边祝福
+     主体区
      ========================================= */
   #main {
     flex: 1;
     display: flex;
     overflow: hidden;
     position: relative;
-    padding: 0 30px 30px;
+    padding: 0 24px 24px;
+    gap: 22px;
     z-index: 5;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;      /* 顶部对齐 */
   }
 
-  #panel {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    max-width: 1700px;
-    max-height: 700px;
-    display: flex;
-    border-radius: 22px;
-    padding: 14px;
-    background: linear-gradient(145deg, rgba(255,252,242,0.85), rgba(240,228,200,0.55));
-    box-shadow:
-      0 0 0 2px rgba(201,162,39,0.6),
-      0 0 0 6px rgba(255,252,242,0.55),
-      0 0 0 7px rgba(201,162,39,0.3),
-      0 0 45px rgba(212,175,55,0.4),
-      inset 0 0 40px rgba(255,250,235,0.7);
-  }
-
-  /* 🎬 左：影片区（变大了） */
+  /* 🎬 影片区 */
   #video-area {
-    flex: 4;                     /* ← 原来是 3，现在 4，影片更大 */
+    width: 60%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 0;
-    padding-right: 14px;
+    align-items: flex-start;
   }
   #video-frame {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
-    max-height: 100%;
-    border-radius: 14px;
-    overflow: hidden;
-    background: #000;
+    border-radius: 20px;
+    padding: 10px;
+    background: linear-gradient(145deg, rgba(255,252,242,0.92), rgba(240,228,200,0.7));
     box-shadow:
-      0 0 0 1px rgba(201,162,39,0.55),
-      0 0 25px rgba(212,175,55,0.3);
+      0 0 0 2px rgba(201,162,39,0.55),
+      0 0 0 5px rgba(255,252,242,0.6),
+      0 0 0 6px rgba(201,162,39,0.25),
+      0 0 35px rgba(212,175,55,0.35),
+      inset 0 0 30px rgba(255,250,235,0.7);
   }
   #video-frame iframe {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    top: 10px; left: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
     border: none;
+    border-radius: 12px;
+    background: #000;
   }
 
-  /* 竖直金色分割线 */
-  #divider {
-    width: 2px;
-    background: linear-gradient(180deg, transparent, #d4af37, #ffe9a3, #d4af37, transparent);
-    box-shadow: 0 0 12px rgba(212,175,55,0.8);
-    margin: 10px 0;
-    flex-shrink: 0;
-  }
-
-  /* 💬 右：祝福区（变短了） */
+  /* =========================================
+     💬 祝福区（外框完全恢复 + 高度和影片框一致）
+     ========================================= */
   #stage {
-    flex: 2;                     /* ← 保持 2，因为影片变 4，祝福相对更短 */
+    width: 40%;
+    aspect-ratio: 16 / 9;
     position: relative;
     overflow: hidden;
-    min-width: 0;
+    border-radius: 20px;
+    padding: 10px;                              /* 和影片框一样的 padding */
+    background: linear-gradient(160deg, rgba(255,252,242,0.55), rgba(240,228,200,0.35));  /* 米色底纹 */
+    box-shadow:
+      0 0 0 2px rgba(201,162,39,0.5),          /* 金色边框 */
+      0 0 0 5px rgba(255,252,242,0.6),         /* 米色外框 */
+      0 0 0 6px rgba(201,162,39,0.25),         /* 金色细边 */
+      0 0 30px rgba(212,175,55,0.22),          /* 外发光 */
+      inset 0 0 40px rgba(255,250,235,0.55);   /* 内发光 */
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-left: 14px;
   }
 
-  #stage::before,
-  #stage::after {
-    content: "";
-    position: absolute;
-    left: 8%;
-    right: 8%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #d4af37, #ffe9a3, #d4af37, transparent);
-    box-shadow: 0 0 10px rgba(212,175,55,0.7);
-    pointer-events: none;
-  }
-  #stage::before { top: calc(50% - 80px); }
-  #stage::after  { bottom: calc(50% - 80px); }
-
-  /* 每条祝福 */
+  /* 每条祝福：无边框、无底色，只有文字 */
   .blessing {
     position: absolute;
     left: 50%; bottom: -180px;
@@ -217,6 +187,7 @@
     width: 94%;
     pointer-events: none;
     padding: 0; border: none; background: none; box-shadow: none;
+    /* 瞬间变大 + 变亮 */
     transition:
       transform 0.005s linear,
       opacity 0.5s ease,
@@ -226,7 +197,7 @@
 
   .blessing .name {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 2.4em;
+    font-size: 2.4em;              /* 一开始就大 */
     color: #a8843f;
     margin-bottom: 12px;
     font-weight: bold;
@@ -236,7 +207,7 @@
   }
   .blessing .msg {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 2em;
+    font-size: 2em;                /* 一开始就大 */
     color: #5c4a2a;
     line-height: 1.5;
     word-break: break-word;
@@ -246,6 +217,7 @@
 
   .blessing.rising { animation: floatUp 8s linear forwards; }
 
+  /* 到中央：瞬间变大 + 全部文字变亮 */
   .blessing.center {
     filter: brightness(1.35) saturate(1.2);
   }
@@ -276,6 +248,7 @@
 </head>
 <body>
 
+<!-- 🏔 山水画背景 -->
 <div id="landscape">
   <img class="painting" src="background.gif" alt="山水画">
   <div class="overlay"></div>
@@ -293,19 +266,16 @@
 </div>
 
 <div id="main">
-  <div id="panel">
-    <div id="video-area">
-      <div id="video-frame">
-        <iframe
-          src="https://www.youtube.com/embed/h1H3Ynd4v20?autoplay=1&mute=1&loop=1&playlist=h1H3Ynd4v20&controls=0&modestbranding=1&rel=0&playsinline=1"
-          allow="autoplay; encrypted-media; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-      </div>
+  <div id="video-area">
+    <div id="video-frame">
+      <iframe
+        src="https://www.youtube.com/embed/h1H3Ynd4v20?autoplay=1&mute=1&loop=1&playlist=h1H3Ynd4v20&controls=0&modestbranding=1&rel=0&playsinline=1"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
     </div>
-    <div id="divider"></div>
-    <div id="stage"></div>
   </div>
+  <div id="stage"></div>
 </div>
 
 <script>
@@ -318,6 +288,7 @@
   const CENTER_END   = 5200;
   const REFRESH_EVERY = 10;
 
+  /* ❄ 祥雪 */
   (function createSnow() {
     const layer = document.getElementById("snowLayer");
     const COUNT = 25;
@@ -338,6 +309,7 @@
     }
   })();
 
+  /* ✨ 金粉 */
   (function createDust() {
     const container = document.getElementById("goldDust");
     const COUNT = 40;
@@ -353,6 +325,7 @@
     }
   })();
 
+  /* 墨点 */
   (function createInk() {
     const landscape = document.getElementById("landscape");
     const COUNT = 15;
@@ -369,6 +342,7 @@
     }
   })();
 
+  /* 祝福滚动 */
   const stage = document.getElementById("stage");
   let data = [];
   let index = 0;
@@ -421,6 +395,7 @@
 
     requestAnimationFrame(() => div.classList.add("rising"));
 
+    // 到中央：瞬间变大 + 全部文字变亮
     setTimeout(() => { if (div.isConnected) div.classList.add("center"); }, CENTER_START);
     setTimeout(() => { if (div.isConnected) div.classList.remove("center"); }, CENTER_END);
     setTimeout(() => div.remove(), ANIM_DURATION + 500);
