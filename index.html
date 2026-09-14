@@ -17,7 +17,7 @@
   }
 
   /* =========================================
-     🏔 山水画背景
+     🏔 山水画背景（background.gif）
      ========================================= */
   #landscape {
     position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
@@ -118,10 +118,7 @@
     opacity: 0;
   }
   @keyframes snowFall {
-    0% {
-      transform: translateY(-30px) translateX(0) rotate(0deg);
-      opacity: 0;
-    }
+    0% { transform: translateY(-30px) translateX(0) rotate(0deg); opacity: 0; }
     8%  { opacity: var(--maxOp, 0.9); }
     90% { opacity: var(--maxOp, 0.9); }
     100% {
@@ -203,7 +200,7 @@
   }
 
   /* =========================================
-     🎬 影片区（16:9 比例）
+     🎬 影片区（16:9）
      ========================================= */
   #video-area {
     width: 60%;
@@ -214,7 +211,6 @@
     position: relative;
   }
 
-  /* 16:9 容器：以宽度为准，按比例算出高度 */
   #video-frame {
     position: relative;
     width: 100%;
@@ -230,14 +226,11 @@
       0 0 35px rgba(212, 175, 55, 0.35),
       inset 0 0 30px rgba(255, 250, 235, 0.7);
   }
-
-  /* 万一屏幕高度不够，用 max-height 压住，并保持比例 */
   #video-frame::before {
     content: "";
     display: block;
-    padding-top: 56.25%;   /* 9 / 16 = 56.25% */
+    padding-top: 56.25%;
   }
-
   #video-frame iframe {
     position: absolute;
     top: 10px; left: 10px;
@@ -247,29 +240,28 @@
     border-radius: 12px;
     background: #000;
   }
-
-  /* 当视口高度太小时，以高度为准，保持 16:9 */
   @media (max-aspect-ratio: 16 / 9) {
-    #video-frame {
-      width: auto;
-      height: 100%;
-      aspect-ratio: 16 / 9;
-    }
+    #video-frame { width: auto; height: 100%; aspect-ratio: 16 / 9; }
     #video-frame::before { display: none; }
   }
 
   /* =========================================
-     💬 祝福区（无边框 + 文字动画）
+     💬 祝福区（外框保留，每条祝福无框）
      ========================================= */
   #stage {
     width: 40%; height: 100%;
     position: relative; overflow: hidden;
-    /* 去掉外面的边框和底色 */
-    background: transparent;
-    box-shadow: none;
+    border-radius: 20px;
+    background: linear-gradient(160deg, rgba(255, 252, 242, 0.55), rgba(240, 228, 200, 0.35));
+    box-shadow:
+      0 0 0 2px rgba(201, 162, 39, 0.5),
+      0 0 0 5px rgba(255, 252, 242, 0.6),
+      0 0 0 6px rgba(201, 162, 39, 0.25),
+      0 0 30px rgba(212, 175, 55, 0.22),
+      inset 0 0 40px rgba(255, 250, 235, 0.55);
   }
 
-  /* 每一条祝福：无边框、无底色，只有文字 */
+  /* 每条祝福：无边框、无底色，只有文字 */
   .blessing {
     position: absolute;
     left: 50%; bottom: -180px;
@@ -278,15 +270,14 @@
     text-align: center;
     width: 94%;
     pointer-events: none;
-    /* 去掉所有边框、背景、内边距 */
     padding: 0;
     border: none;
     background: none;
     box-shadow: none;
     transition:
-      transform 0.9s ease,
-      opacity 0.9s ease,
-      filter 0.9s ease;
+      transform 0.005s linear,
+      opacity 0.5s ease,
+      filter 0.005s linear;
     will-change: transform, opacity, filter;
   }
 
@@ -300,7 +291,7 @@
     text-shadow:
       0 0 8px rgba(255, 230, 160, 0.6),
       0 2px 4px rgba(139, 107, 46, 0.3);
-    transition: color 0.9s ease, text-shadow 0.9s ease;
+    transition: color 0.005s linear, text-shadow 0.005s linear;
   }
 
   .blessing .msg {
@@ -312,47 +303,47 @@
     text-shadow:
       0 0 6px rgba(255, 245, 210, 0.5),
       0 1px 3px rgba(139, 107, 46, 0.25);
-    transition: color 0.9s ease, text-shadow 0.9s ease;
+    transition: color 0.005s linear, text-shadow 0.005s linear;
   }
 
-  .blessing.rising { animation: floatUp 8s linear forwards; }
+  .blessing.rising {
+    animation: floatUp 8s linear forwards;
+  }
 
-  /* 到中央时：整体放大 + 文字变亮 + 发光 */
+  /* 到中央：瞬间变亮 + 放大 */
   .blessing.center {
-    transform: translateX(-50%) scale(1.55);
-    filter: brightness(1.15) saturate(1.1);
+    filter: brightness(1.25) saturate(1.15);
   }
   .blessing.center .name {
     color: #d4af37;
     text-shadow:
-      0 0 16px rgba(255, 215, 100, 1),
-      0 0 36px rgba(255, 230, 160, 0.85),
-      0 0 60px rgba(255, 245, 210, 0.5),
+      0 0 18px rgba(255, 215, 100, 1),
+      0 0 40px rgba(255, 230, 160, 0.9),
+      0 0 70px rgba(255, 245, 210, 0.55),
       0 2px 6px rgba(139, 107, 46, 0.35);
   }
   .blessing.center .msg {
     color: #6e4f18;
     text-shadow:
-      0 0 14px rgba(255, 230, 160, 0.95),
-      0 0 30px rgba(255, 245, 210, 0.7),
-      0 0 50px rgba(255, 250, 230, 0.4),
+      0 0 16px rgba(255, 230, 160, 1),
+      0 0 36px rgba(255, 245, 210, 0.8),
+      0 0 60px rgba(255, 250, 230, 0.5),
       0 2px 5px rgba(139, 107, 46, 0.3);
   }
 
   @keyframes floatUp {
     0%   { bottom: -180px; opacity: 0; }
-    15%  { opacity: 1; }
-    40%  { bottom: 40%; opacity: 1; }
-    62%  { bottom: 43%; opacity: 1; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
     100% { bottom: 112%; opacity: 0; }
   }
 </style>
 </head>
 <body>
 
-<!-- 🏔 山水画背景 -->
+<!-- 🏔 山水画背景（background.gif） -->
 <div id="landscape">
-  <img class="painting" src="background.png" alt="山水画">
+  <img class="painting" src="background.gif" alt="山水画">
   <div class="overlay"></div>
   <div class="cloud c1"></div>
   <div class="cloud c2"></div>
@@ -375,7 +366,6 @@
 <div id="main">
   <div id="video-area">
     <div id="video-frame">
-      <!-- YouTube：自动播放 + 静音 + 循环 -->
       <iframe
         src="https://www.youtube.com/embed/h1H3Ynd4v20?autoplay=1&mute=1&loop=1&playlist=h1H3Ynd4v20&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&playsinline=1"
         allow="autoplay; encrypted-media; picture-in-picture"
@@ -504,6 +494,7 @@
     stage.appendChild(div);
 
     requestAnimationFrame(() => div.classList.add("rising"));
+
     setTimeout(() => { if (div.isConnected) div.classList.add("center"); }, CENTER_START);
     setTimeout(() => { if (div.isConnected) div.classList.remove("center"); }, CENTER_END);
     setTimeout(() => div.remove(), ANIM_DURATION + 500);
