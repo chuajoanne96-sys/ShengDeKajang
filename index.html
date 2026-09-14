@@ -3,12 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>圣德安座设坛祝福展示</title>
-
-<!-- 引入手写中文字体 -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
-
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; }
@@ -22,6 +16,7 @@
     background: #f6efdc;
   }
 
+  /* 🏔 山水画背景 */
   #landscape { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
   #landscape .painting {
     position: absolute; inset: 0; width: 100%; height: 100%;
@@ -59,6 +54,7 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 40px)) scale(1); opacity: 0; }
   }
 
+  /* ✨ 金粉 */
   #goldDust { position: fixed; inset: 0; pointer-events: none; z-index: 3; overflow: hidden; }
   .dust {
     position: absolute; top: -20px; width: 6px; height: 6px; border-radius: 50%;
@@ -72,6 +68,7 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 30px)) scale(1); opacity: 0; }
   }
 
+  /* ❄ 祥雪 */
   #snowLayer { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
   .snowflake {
     position: absolute; top: -30px; color: #ffffff;
@@ -85,6 +82,7 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 30px)) rotate(360deg); opacity: 0; }
   }
 
+  /* 顶部标题 */
   #title { width: 100%; text-align: center; padding: 18px 10px 10px; z-index: 10; position: relative; }
   #title::before {
     content: ""; position: absolute; top: 50%; left: 50%;
@@ -113,6 +111,9 @@
   }
   @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
+  /* =========================================
+     主体区
+     ========================================= */
   #main {
     flex: 1;
     display: flex;
@@ -124,6 +125,7 @@
     align-items: stretch;
   }
 
+  /* 🎬 影片区 */
   #video-area {
     width: 70%;
     display: flex;
@@ -153,6 +155,9 @@
     background: #000;
   }
 
+  /* =========================================
+     💬 祝福区
+     ========================================= */
   #stage {
     width: 30%;
     height: 100%;
@@ -172,59 +177,67 @@
     justify-content: center;
   }
 
+  /* 每条祝福：在画面正中央出现，原地慢慢放大 */
   .blessing {
     position: absolute;
-    left: 50%; bottom: -180px;
-    transform: translateX(-50%) scale(0.35);
+    left: 50%;
+    top: 50%;                 /* ← 从底部改成中间 */
+    transform: translate(-50%, -50%) scale(0.3);
     opacity: 0;
     text-align: center;
     width: 94%;
     pointer-events: none;
     padding: 0; border: none; background: none; box-shadow: none;
-    transition:
-      transform 3s linear,
-      opacity 0.5s ease,
-      filter 3s linear;
+    /* 全程慢慢放大 + 变亮 + 淡出 */
+    animation: centerGrow 7s ease-in-out forwards;
     will-change: transform, opacity, filter;
-    /* 统一使用手写字体 */
-    font-family: "Ma Shan Zheng", "STKaiti", "KaiTi", "楷体", serif;
   }
 
-  /* 名字：5em，不加粗（温馨） */
   .blessing .name {
-    font-family: inherit;
-    font-size: 5em;
+    font-family: "STKaiti","KaiTi","楷体",serif;
+    font-size: 3.2em;
     color: #a8843f;
     margin-bottom: 14px;
-    font-weight: normal;
-    letter-spacing: 4px;
-    text-shadow: 0 0 8px rgba(255,230,160,0.5), 0 2px 4px rgba(139,107,46,0.25);
-    transition: color 3s linear;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-shadow: 0 0 8px rgba(255,230,160,0.6), 0 2px 4px rgba(139,107,46,0.3);
   }
-  /* 祝福语：4em，不加粗（温馨） */
   .blessing .msg {
-    font-family: inherit;
-    font-size: 4em;
-    font-weight: normal;
+    font-family: "STKaiti","KaiTi","楷体",serif;
+    font-size: 2.6em;
     color: #5c4a2a;
     line-height: 1.5;
     word-break: break-word;
-    text-shadow: 0 0 6px rgba(255,245,210,0.4), 0 1px 3px rgba(139,107,46,0.2);
-    transition: color 3s linear;
+    text-shadow: 0 0 6px rgba(255,245,210,0.5), 0 1px 3px rgba(139,107,46,0.25);
   }
 
-  .blessing.rising { animation: floatUp 8s linear forwards; }
-
-  /* 到中央：只变大，不发光 */
-  .blessing.center {
-    transform: translateX(-50%) scale(1.4);
-  }
-
-  @keyframes floatUp {
-    0%   { bottom: -180px; opacity: 0; transform: translateX(-50%) scale(0.35); }
-    12%  { opacity: 1; }
-    88%  { opacity: 1; }
-    100% { bottom: 112%; opacity: 0; transform: translateX(-50%) scale(0.35); }
+  /* 关键帧：从中间出现 → 慢慢放大 → 变亮 → 淡出 */
+  @keyframes centerGrow {
+    0% {
+      transform: translate(-50%, -50%) scale(0.3);
+      opacity: 0;
+      filter: brightness(1);
+    }
+    15% {
+      transform: translate(-50%, -50%) scale(0.55);
+      opacity: 0.6;
+      filter: brightness(1.05);
+    }
+    45% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      filter: brightness(1.15);
+    }
+    70% {
+      transform: translate(-50%, -50%) scale(1.25);
+      opacity: 1;
+      filter: brightness(1.35) saturate(1.2);
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1.45);
+      opacity: 0;
+      filter: brightness(1.45) saturate(1.25);
+    }
   }
 </style>
 </head>
@@ -260,14 +273,12 @@
 </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbxF8hC9RsOFRP3QriiJXAPen6PpeGR5k3A0hFt42KdF3hswSGaIagh7qOQrCOlJQ9SVkw/exec";
-  const REFRESH_EVERY = 5;
-
-  const INTERVAL = 3000;
-  const ANIM_DURATION = 8000;
-  const CENTER_START = 2800;
-  const CENTER_HOLD  = 3000;
-  const CENTER_END   = CENTER_START + CENTER_HOLD;
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINVU6wcYbYDGsi0XZEeaDQ4OHrIeE3h5ztp9t4MJ1hTK2sL7DMoLcg67qfXJdMj6aCRRDomEaOPKr/pub?gid=0&single=true&output=csv";
+  const NAME_COL = 0;
+  const MSG_COL = 1;
+  const INTERVAL = 4000;          // 每 4 秒一条（因为动画更长）
+  const ANIM_DURATION = 7000;     // 动画时长 7 秒
+  const REFRESH_EVERY = 10;
 
   (function createSnow() {
     const layer = document.getElementById("snowLayer");
@@ -324,11 +335,35 @@
   let data = [];
   let index = 0;
 
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = "", inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQuotes) {
+        if (c === '"') { if (text[i+1] === '"') { field += '"'; i++; } else inQuotes = false; }
+        else field += c;
+      } else {
+        if (c === '"') inQuotes = true;
+        else if (c === ',') { row.push(field); field = ""; }
+        else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ""; }
+        else if (c === '\r') { }
+        else field += c;
+      }
+    }
+    if (field !== "" || row.length > 0) { row.push(field); rows.push(row); }
+    return rows.filter(r => r.some(cell => cell.trim() !== ""));
+  }
+
   async function loadData() {
     try {
-      const res = await fetch(API_URL + "?t=" + Date.now());
-      const json = await res.json();
-      data = json.data || [];
+      const res = await fetch(CSV_URL + "&t=" + Date.now());
+      const text = await res.text();
+      const rows = parseCSV(text);
+      data = rows.slice(1).map(r => ({
+        name: (r[NAME_COL] || "").trim(),
+        msg: (r[MSG_COL] || "").trim()
+      })).filter(d => d.name || d.msg);
       console.log("已加载数据:", data.length, "条");
     } catch (e) {
       console.error("加载数据失败:", e);
@@ -344,15 +379,12 @@
     `;
     stage.appendChild(div);
 
-    requestAnimationFrame(() => div.classList.add("rising"));
-
-    setTimeout(() => { if (div.isConnected) div.classList.add("center"); }, CENTER_START);
-    setTimeout(() => { if (div.isConnected) div.classList.remove("center"); }, CENTER_END);
+    // 动画结束后移除
     setTimeout(() => div.remove(), ANIM_DURATION + 500);
   }
 
   function escapeHTML(s) {
-    return String(s).replace(/[&<>"']/g, c => ({
+    return s.replace(/[&<>"']/g, c => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     }[c]));
   }
