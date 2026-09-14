@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>圣德安座设坛祝福展示</title>
+
+<!-- 引入手写中文字体 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; }
@@ -180,55 +186,45 @@
       opacity 0.5s ease,
       filter 3s linear;
     will-change: transform, opacity, filter;
+    /* 统一使用手写字体 */
+    font-family: "Ma Shan Zheng", "STKaiti", "KaiTi", "楷体", serif;
   }
 
-  /* 名字：3.35em → 4.5em（+6 级） */
+  /* 名字：5em，加粗 */
   .blessing .name {
-    font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 4.5em;
+    font-family: inherit;
+    font-size: 5em;
     color: #a8843f;
     margin-bottom: 14px;
     font-weight: bold;
     letter-spacing: 4px;
     text-shadow: 0 0 8px rgba(255,230,160,0.6), 0 2px 4px rgba(139,107,46,0.3);
-    transition: color 3s linear, text-shadow 3s linear;
+    transition: color 3s linear;
   }
-  /* 祝福语：3.35em → 4.5em（+6 级） */
+  /* 祝福语：4em，加粗 */
   .blessing .msg {
-    font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 4.5em;
+    font-family: inherit;
+    font-size: 4em;
+    font-weight: bold;                /* ← 祝福语加粗 */
     color: #5c4a2a;
     line-height: 1.5;
     word-break: break-word;
     text-shadow: 0 0 6px rgba(255,245,210,0.5), 0 1px 3px rgba(139,107,46,0.25);
-    transition: color 3s linear, text-shadow 3s linear;
+    transition: color 3s linear;
   }
 
   .blessing.rising { animation: floatUp 8s linear forwards; }
 
-  .blessing.center { filter: brightness(1.4) saturate(1.25); }
-  .blessing.center .name {
-    color: #ffe9a3;
-    text-shadow:
-      0 0 25px rgba(255,215,100,1),
-      0 0 55px rgba(255,230,160,0.95),
-      0 0 95px rgba(255,245,210,0.65),
-      0 2px 6px rgba(139,107,46,0.4);
-  }
-  .blessing.center .msg {
-    color: #d4af37;
-    text-shadow:
-      0 0 25px rgba(255,230,160,1),
-      0 0 50px rgba(255,245,210,0.9),
-      0 0 85px rgba(255,250,230,0.6),
-      0 2px 5px rgba(139,107,46,0.35);
+  /* 到中央：只变大，不发光 */
+  .blessing.center {
+    transform: translateX(-50%) scale(1.4);
   }
 
   @keyframes floatUp {
-    0%   { bottom: -180px; opacity: 0; }
+    0%   { bottom: -180px; opacity: 0; transform: translateX(-50%) scale(0.35); }
     12%  { opacity: 1; }
     88%  { opacity: 1; }
-    100% { bottom: 112%; opacity: 0; }
+    100% { bottom: 112%; opacity: 0; transform: translateX(-50%) scale(0.35); }
   }
 </style>
 </head>
@@ -264,10 +260,8 @@
 </div>
 
 <script>
-  // ====== 配置区 ======
   const API_URL = "https://script.google.com/macros/s/AKfycbxF8hC9RsOFRP3QriiJXAPen6PpeGR5k3A0hFt42KdF3hswSGaIagh7qOQrCOlJQ9SVkw/exec";
   const REFRESH_EVERY = 5;
-  // ===================
 
   const INTERVAL = 3000;
   const ANIM_DURATION = 8000;
