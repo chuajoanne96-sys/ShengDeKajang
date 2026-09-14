@@ -17,12 +17,11 @@
   }
 
   /* =========================================
-     🏔 山水画背景（用 background.png）
+     🏔 山水画背景
      ========================================= */
   #landscape {
     position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
   }
-
   #landscape .painting {
     position: absolute;
     inset: 0;
@@ -43,7 +42,6 @@
     pointer-events: none;
   }
 
-  /* 云雾 */
   #landscape .cloud {
     position: absolute; border-radius: 50%;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.35) 40%, transparent 75%);
@@ -66,7 +64,6 @@
     100% { transform: translateX(120vw) translateY(-8px); }
   }
 
-  /* 墨点飘落 */
   #landscape .ink {
     position: absolute; top: -20px; border-radius: 50%;
     background: radial-gradient(circle, rgba(80, 65, 40, 0.35) 0%, rgba(80, 65, 40, 0) 70%);
@@ -96,6 +93,41 @@
     10%  { opacity: 0.9; }
     90%  { opacity: 0.7; }
     100% { transform: translateY(110vh) translateX(var(--drift, 30px)) scale(1); opacity: 0; }
+  }
+
+  /* =========================================
+     ❄ 祥雪
+     ========================================= */
+  #snowLayer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    overflow: hidden;
+  }
+  .snowflake {
+    position: absolute;
+    top: -30px;
+    color: #ffffff;
+    user-select: none;
+    pointer-events: none;
+    text-shadow:
+      0 0 6px rgba(255, 255, 255, 0.9),
+      0 0 12px rgba(200, 220, 255, 0.6);
+    animation: snowFall linear infinite;
+    opacity: 0;
+  }
+  @keyframes snowFall {
+    0% {
+      transform: translateY(-30px) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+    8%  { opacity: var(--maxOp, 0.9); }
+    90% { opacity: var(--maxOp, 0.9); }
+    100% {
+      transform: translateY(110vh) translateX(var(--drift, 30px)) rotate(360deg);
+      opacity: 0;
+    }
   }
 
   /* =========================================
@@ -170,12 +202,26 @@
     z-index: 5;
   }
 
+  /* =========================================
+     🎬 影片区（16:9 比例）
+     ========================================= */
   #video-area {
-    width: 60%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
+    width: 60%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
+  }
+
+  /* 16:9 容器：以宽度为准，按比例算出高度 */
+  #video-frame {
+    position: relative;
+    width: 100%;
+    max-height: 100%;
+    aspect-ratio: 16 / 9;
     border-radius: 20px;
-    padding: 12px;
+    padding: 10px;
     background: linear-gradient(145deg, rgba(255, 252, 242, 0.92), rgba(240, 228, 200, 0.7));
     box-shadow:
       0 0 0 2px rgba(201, 162, 39, 0.55),
@@ -184,86 +230,113 @@
       0 0 35px rgba(212, 175, 55, 0.35),
       inset 0 0 30px rgba(255, 250, 235, 0.7);
   }
-  #video-area video {
-    width: 100%; height: 100%;
-    object-fit: contain;
-    border-radius: 12px;
+
+  /* 万一屏幕高度不够，用 max-height 压住，并保持比例 */
+  #video-frame::before {
+    content: "";
+    display: block;
+    padding-top: 56.25%;   /* 9 / 16 = 56.25% */
   }
 
+  #video-frame iframe {
+    position: absolute;
+    top: 10px; left: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border: none;
+    border-radius: 12px;
+    background: #000;
+  }
+
+  /* 当视口高度太小时，以高度为准，保持 16:9 */
+  @media (max-aspect-ratio: 16 / 9) {
+    #video-frame {
+      width: auto;
+      height: 100%;
+      aspect-ratio: 16 / 9;
+    }
+    #video-frame::before { display: none; }
+  }
+
+  /* =========================================
+     💬 祝福区（无边框 + 文字动画）
+     ========================================= */
   #stage {
     width: 40%; height: 100%;
     position: relative; overflow: hidden;
-    border-radius: 20px;
-    background: linear-gradient(160deg, rgba(255, 252, 242, 0.82), rgba(240, 228, 200, 0.55));
-    box-shadow:
-      0 0 0 2px rgba(201, 162, 39, 0.5),
-      0 0 0 5px rgba(255, 252, 242, 0.6),
-      0 0 0 6px rgba(201, 162, 39, 0.25),
-      0 0 30px rgba(212, 175, 55, 0.22),
-      inset 0 0 40px rgba(255, 250, 235, 0.55);
+    /* 去掉外面的边框和底色 */
+    background: transparent;
+    box-shadow: none;
   }
 
+  /* 每一条祝福：无边框、无底色，只有文字 */
   .blessing {
     position: absolute;
     left: 50%; bottom: -180px;
     transform: translateX(-50%) scale(0.35);
     opacity: 0;
     text-align: center;
-    width: 88%;
+    width: 94%;
     pointer-events: none;
-    padding: 16px 20px;
-    border-radius: 16px;
-    border: 2px solid rgba(201, 162, 39, 0.45);
-    background: linear-gradient(160deg, rgba(255, 253, 246, 0.95), rgba(250, 242, 220, 0.88));
+    /* 去掉所有边框、背景、内边距 */
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
     transition:
       transform 0.9s ease,
-      box-shadow 0.9s ease,
-      border-color 0.9s ease,
-      background 0.9s ease,
-      opacity 0.9s ease;
-    box-shadow:
-      0 2px 10px rgba(139, 107, 46, 0.15),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+      opacity 0.9s ease,
+      filter 0.9s ease;
+    will-change: transform, opacity, filter;
   }
-  .blessing::before {
-    content: "";
-    position: absolute; inset: 5px;
-    border-radius: 11px;
-    border: 1px solid rgba(201, 162, 39, 0.4);
-    pointer-events: none;
-  }
+
   .blessing .name {
     font-family: "STKaiti", "KaiTi", "楷体", serif;
-    font-size: 1.2em;
+    font-size: 1.6em;
     color: #a8843f;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-weight: bold;
-    letter-spacing: 3px;
-    position: relative;
+    letter-spacing: 4px;
+    text-shadow:
+      0 0 8px rgba(255, 230, 160, 0.6),
+      0 2px 4px rgba(139, 107, 46, 0.3);
+    transition: color 0.9s ease, text-shadow 0.9s ease;
   }
+
   .blessing .msg {
     font-family: "STKaiti", "KaiTi", "楷体", serif;
-    font-size: 1.05em;
+    font-size: 1.35em;
     color: #5c4a2a;
     line-height: 1.6;
     word-break: break-word;
-    position: relative;
+    text-shadow:
+      0 0 6px rgba(255, 245, 210, 0.5),
+      0 1px 3px rgba(139, 107, 46, 0.25);
+    transition: color 0.9s ease, text-shadow 0.9s ease;
   }
 
   .blessing.rising { animation: floatUp 8s linear forwards; }
 
+  /* 到中央时：整体放大 + 文字变亮 + 发光 */
   .blessing.center {
-    transform: translateX(-50%) scale(1.5);
-    border-color: #e6c34a;
-    background: linear-gradient(160deg, rgba(255, 255, 250, 1), rgba(255, 248, 225, 0.98));
-    box-shadow:
-      0 0 35px rgba(212, 175, 55, 0.9),
-      0 0 70px rgba(212, 175, 55, 0.45),
-      inset 0 0 22px rgba(255, 245, 210, 0.9);
+    transform: translateX(-50%) scale(1.55);
+    filter: brightness(1.15) saturate(1.1);
   }
-  .blessing.center::before {
-    border-color: rgba(230, 195, 74, 0.85);
-    box-shadow: inset 0 0 10px rgba(230, 195, 74, 0.45);
+  .blessing.center .name {
+    color: #d4af37;
+    text-shadow:
+      0 0 16px rgba(255, 215, 100, 1),
+      0 0 36px rgba(255, 230, 160, 0.85),
+      0 0 60px rgba(255, 245, 210, 0.5),
+      0 2px 6px rgba(139, 107, 46, 0.35);
+  }
+  .blessing.center .msg {
+    color: #6e4f18;
+    text-shadow:
+      0 0 14px rgba(255, 230, 160, 0.95),
+      0 0 30px rgba(255, 245, 210, 0.7),
+      0 0 50px rgba(255, 250, 230, 0.4),
+      0 2px 5px rgba(139, 107, 46, 0.3);
   }
 
   @keyframes floatUp {
@@ -277,9 +350,7 @@
 </head>
 <body>
 
-<!-- =========================================
-     🏔 山水画背景
-     ========================================= -->
+<!-- 🏔 山水画背景 -->
 <div id="landscape">
   <img class="painting" src="background.png" alt="山水画">
   <div class="overlay"></div>
@@ -291,6 +362,9 @@
 <!-- 金粉 -->
 <div id="goldDust"></div>
 
+<!-- 祥雪 -->
+<div id="snowLayer"></div>
+
 <!-- 顶部标题 -->
 <div id="title">
   <div class="line1">謝謝大家蒞臨</div>
@@ -300,10 +374,14 @@
 <!-- 主体 -->
 <div id="main">
   <div id="video-area">
-    <video autoplay muted loop playsinline>
-      <source src="your-video.mp4" type="video/mp4">
-      你的浏览器不支持 HTML5 影片。
-    </video>
+    <div id="video-frame">
+      <!-- YouTube：自动播放 + 静音 + 循环 -->
+      <iframe
+        src="https://www.youtube.com/embed/h1H3Ynd4v20?autoplay=1&mute=1&loop=1&playlist=h1H3Ynd4v20&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&playsinline=1"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
   </div>
   <div id="stage"></div>
 </div>
@@ -316,7 +394,30 @@
   const ANIM_DURATION = 8000;
   const CENTER_START = 3200;
   const CENTER_END   = 5200;
+  const REFRESH_EVERY = 10;
 
+  /* ❄ 祥雪（25 片） */
+  (function createSnow() {
+    const layer = document.getElementById("snowLayer");
+    const COUNT = 25;
+    const shapes = ["❄", "❅", "❆", "✻", "✼", "•", "◦"];
+    for (let i = 0; i < COUNT; i++) {
+      const s = document.createElement("span");
+      s.className = "snowflake";
+      s.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+      const size = 8 + Math.random() * 18;
+      s.style.fontSize = size + "px";
+      s.style.left = Math.random() * 100 + "vw";
+      const dur = 14 + Math.random() * 18;
+      s.style.animationDuration = dur + "s";
+      s.style.animationDelay = (-Math.random() * dur) + "s";
+      s.style.setProperty("--drift", ((Math.random() - 0.5) * 160) + "px");
+      s.style.setProperty("--maxOp", (0.3 + Math.random() * 0.5).toFixed(2));
+      layer.appendChild(s);
+    }
+  })();
+
+  /* ✨ 金粉 */
   (function createDust() {
     const container = document.getElementById("goldDust");
     const COUNT = 40;
@@ -332,6 +433,7 @@
     }
   })();
 
+  /* 墨点 */
   (function createInk() {
     const landscape = document.getElementById("landscape");
     const COUNT = 15;
@@ -348,6 +450,7 @@
     }
   })();
 
+  /* 祝福滚动 */
   const stage = document.getElementById("stage");
   let data = [];
   let index = 0;
@@ -401,7 +504,6 @@
     stage.appendChild(div);
 
     requestAnimationFrame(() => div.classList.add("rising"));
-
     setTimeout(() => { if (div.isConnected) div.classList.add("center"); }, CENTER_START);
     setTimeout(() => { if (div.isConnected) div.classList.remove("center"); }, CENTER_END);
     setTimeout(() => div.remove(), ANIM_DURATION + 500);
@@ -423,7 +525,10 @@
       showBlessing(data[index % data.length]);
       index++;
     }, INTERVAL);
-    setInterval(loadData, 30000);
+    setInterval(loadData, REFRESH_EVERY * 1000);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) loadData();
+    });
   }
 
   start();
