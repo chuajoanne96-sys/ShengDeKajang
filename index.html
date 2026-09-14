@@ -90,15 +90,10 @@
     background: radial-gradient(ellipse, rgba(255, 245, 210, 0.75) 0%, transparent 70%);
     pointer-events: none; z-index: -1;
   }
-  /* 「謝謝大家蒞臨」变大 5 倍 */
   #title .line1 {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 7em;               /* ← 从 1.4em 改成 7em（×5） */
-    letter-spacing: 20px;
-    color: #8b6b2e;
-    margin-bottom: 10px;
-    text-shadow: 0 2px 6px rgba(139, 107, 46, 0.35);
-    display: block;
+    font-size: 1.4em; letter-spacing: 12px; color: #8b6b2e; margin-bottom: 4px;
+    text-shadow: 0 1px 3px rgba(139, 107, 46, 0.3);
   }
   #title .line2 {
     font-family: "STKaiti","KaiTi","楷体","STSong","宋体",serif;
@@ -161,7 +156,7 @@
   }
 
   /* =========================================
-     💬 祝福区
+     💬 祝福区（高度跟随影片框，文字大小和标题一样）
      ========================================= */
   #stage {
     width: 30%;
@@ -182,6 +177,7 @@
     justify-content: center;
   }
 
+  /* 每条祝福：无边框、无底色，只有文字 */
   .blessing {
     position: absolute;
     left: 50%; bottom: -180px;
@@ -198,10 +194,10 @@
     will-change: transform, opacity, filter;
   }
 
-  /* 姓名 */
+  /* 姓名：比标题第二行「聖德安座設壇」大一点 */
   .blessing .name {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 3.2em;
+    font-size: 3.6em;                 /* ← 3.6em */
     color: #a8843f;
     margin-bottom: 14px;
     font-weight: bold;
@@ -209,10 +205,10 @@
     text-shadow: 0 0 8px rgba(255,230,160,0.6), 0 2px 4px rgba(139,107,46,0.3);
     transition: color 0.005s linear, text-shadow 0.005s linear;
   }
-  /* 祝福语：改成和「聖德安座設壇」一样大（3em） */
+  /* 祝福语：和「聖德安座設壇」一样大（3em） */
   .blessing .msg {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 3em;               /* ← 和 line2 的 3em 一样 */
+    font-size: 3em;                   /* ← 3em，和标题第二行一样 */
     color: #5c4a2a;
     line-height: 1.5;
     word-break: break-word;
