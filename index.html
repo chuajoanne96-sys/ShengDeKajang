@@ -90,10 +90,15 @@
     background: radial-gradient(ellipse, rgba(255, 245, 210, 0.75) 0%, transparent 70%);
     pointer-events: none; z-index: -1;
   }
+  /* 「謝謝大家蒞臨」变大 5 倍 */
   #title .line1 {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 1.4em; letter-spacing: 12px; color: #8b6b2e; margin-bottom: 4px;
-    text-shadow: 0 1px 3px rgba(139, 107, 46, 0.3);
+    font-size: 7em;               /* ← 从 1.4em 改成 7em（×5） */
+    letter-spacing: 20px;
+    color: #8b6b2e;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 6px rgba(139, 107, 46, 0.35);
+    display: block;
   }
   #title .line2 {
     font-family: "STKaiti","KaiTi","楷体","STSong","宋体",serif;
@@ -125,9 +130,9 @@
     align-items: stretch;
   }
 
-  /* 🎬 影片区（变大了） */
+  /* 🎬 影片区 */
   #video-area {
-    width: 70%;                /* ← 从 60% 改成 70% */
+    width: 70%;
     display: flex;
     align-items: flex-start;
   }
@@ -156,10 +161,10 @@
   }
 
   /* =========================================
-     💬 祝福区（变短了，文字变大了）
+     💬 祝福区
      ========================================= */
   #stage {
-    width: 30%;                /* ← 从 40% 改成 30% */
+    width: 30%;
     height: 100%;
     position: relative;
     overflow: hidden;
@@ -177,7 +182,6 @@
     justify-content: center;
   }
 
-  /* 每条祝福：无边框、无底色，只有文字 */
   .blessing {
     position: absolute;
     left: 50%; bottom: -180px;
@@ -194,10 +198,10 @@
     will-change: transform, opacity, filter;
   }
 
-  /* 姓名：比标题第一行「謝謝大家蒞臨」大很多 */
+  /* 姓名 */
   .blessing .name {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 3.2em;                 /* ← 从 2.4em 改成 3.2em */
+    font-size: 3.2em;
     color: #a8843f;
     margin-bottom: 14px;
     font-weight: bold;
@@ -205,10 +209,10 @@
     text-shadow: 0 0 8px rgba(255,230,160,0.6), 0 2px 4px rgba(139,107,46,0.3);
     transition: color 0.005s linear, text-shadow 0.005s linear;
   }
-  /* 祝福语：也变大 */
+  /* 祝福语：改成和「聖德安座設壇」一样大（3em） */
   .blessing .msg {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 2.6em;                 /* ← 从 2em 改成 2.6em */
+    font-size: 3em;               /* ← 和 line2 的 3em 一样 */
     color: #5c4a2a;
     line-height: 1.5;
     word-break: break-word;
