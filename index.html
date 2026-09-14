@@ -112,7 +112,7 @@
   @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
   /* =========================================
-     主体区（左右高度强制一致）
+     主体区（左右高度一致）
      ========================================= */
   #main {
     flex: 1;
@@ -125,9 +125,9 @@
     align-items: stretch;
   }
 
-  /* 🎬 影片区 */
+  /* 🎬 影片区（变大了） */
   #video-area {
-    width: 60%;
+    width: 70%;                /* ← 从 60% 改成 70% */
     display: flex;
     align-items: flex-start;
   }
@@ -156,10 +156,10 @@
   }
 
   /* =========================================
-     💬 祝福区（高度跟随影片框）
+     💬 祝福区（变短了，文字变大了）
      ========================================= */
   #stage {
-    width: 40%;
+    width: 30%;                /* ← 从 40% 改成 30% */
     height: 100%;
     position: relative;
     overflow: hidden;
@@ -194,19 +194,21 @@
     will-change: transform, opacity, filter;
   }
 
+  /* 姓名：比标题第一行「謝謝大家蒞臨」大很多 */
   .blessing .name {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 2.4em;
+    font-size: 3.2em;                 /* ← 从 2.4em 改成 3.2em */
     color: #a8843f;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     font-weight: bold;
     letter-spacing: 5px;
     text-shadow: 0 0 8px rgba(255,230,160,0.6), 0 2px 4px rgba(139,107,46,0.3);
     transition: color 0.005s linear, text-shadow 0.005s linear;
   }
+  /* 祝福语：也变大 */
   .blessing .msg {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 2em;
+    font-size: 2.6em;                 /* ← 从 2em 改成 2.6em */
     color: #5c4a2a;
     line-height: 1.5;
     word-break: break-word;
