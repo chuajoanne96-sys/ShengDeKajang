@@ -20,6 +20,11 @@
     flex-direction: column;
     position: relative;
     background: #f6efdc;
+
+    /* 关键：防止 F11 全屏时顶部标题被切掉 */
+    height: 100vh;
+    height: 100dvh;          /* 现代浏览器动态视口高度，更准确 */
+    min-height: 0;
   }
 
   #landscape { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
@@ -85,27 +90,45 @@
     100% { transform: translateY(110vh) translateX(var(--drift, 30px)) rotate(360deg); opacity: 0; }
   }
 
-  #title { width: 100%; text-align: center; padding: 18px 10px 10px; z-index: 10; position: relative; }
+  /* ===== 标题区域：缩小顶部/底部 padding，防止 F11 裁切，同时放大字体 ===== */
+  #title {
+    width: 100%;
+    text-align: center;
+    padding: 8px 10px 4px;          /* 减小上下内边距，防止全屏时被切 */
+    z-index: 10;
+    position: relative;
+    flex-shrink: 0;                 /* 防止被压缩 */
+  }
   #title::before {
     content: ""; position: absolute; top: 50%; left: 50%;
     width: 900px; height: 200px; transform: translate(-50%, -50%);
     background: radial-gradient(ellipse, rgba(255, 245, 210, 0.75) 0%, transparent 70%);
     pointer-events: none; z-index: -1;
   }
+  /* 第一行：謝謝大家蒞臨 —— 字体放大 */
   #title .line1 {
     font-family: "STKaiti","KaiTi","楷体",serif;
-    font-size: 1.4em; letter-spacing: 12px; color: #8b6b2e; margin-bottom: 4px;
+    font-size: 2.2em;               /* 原来是 1.4em，放大 */
+    letter-spacing: 16px;           /* 字距加大，更有气势 */
+    color: #8b6b2e;
+    margin-bottom: 2px;             /* 上下行间距缩小，节省高度 */
+    line-height: 1.25;
     text-shadow: 0 1px 3px rgba(139, 107, 46, 0.3);
   }
+  /* 第二行：聖德安座設壇 —— 字体放大 */
   #title .line2 {
     font-family: "STKaiti","KaiTi","楷体","STSong","宋体",serif;
-    font-size: 3em; letter-spacing: 18px; font-weight: bold; color: #6e4f18;
-    padding-left: 18px;
+    font-size: 4.2em;               /* 原来是 3em，放大 */
+    letter-spacing: 22px;
+    font-weight: bold;
+    color: #6e4f18;
+    padding-left: 22px;
+    line-height: 1.2;
     text-shadow: 0 0 20px rgba(212,175,55,0.85), 0 0 40px rgba(255,230,160,0.5), 0 3px 6px rgba(110,79,24,0.35);
     display: inline-block;
   }
   #title::after {
-    content: ""; display: block; width: 260px; height: 2px; margin: 10px auto 0;
+    content: ""; display: block; width: 260px; height: 2px; margin: 4px auto 0;
     background: linear-gradient(90deg, transparent, #c9a227, #ffe9a3, #d4af37, #c9a227, transparent);
     background-size: 200% 100%;
     box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
@@ -118,10 +141,11 @@
     display: flex;
     overflow: hidden;
     position: relative;
-    padding: 0 24px 24px;
+    padding: 0 24px 18px;           /* 底部 padding 稍减，给标题留空间 */
     gap: 22px;
     z-index: 5;
     align-items: stretch;
+    min-height: 0;                  /* 关键：允许 flex 子项在高度不足时收缩 */
   }
 
   #video-area {
@@ -172,21 +196,17 @@
     justify-content: center;
   }
 
-  /* ---------- 关键：固定每个祝福单元的高度 ---------- */
+  /* ---------- 固定每个祝福单元的高度 ---------- */
   .blessing {
     position: absolute;
     left: 50%;
-    bottom: -300px;                     /* 起始位置更低，配合更大的固定高度 */
+    bottom: -300px;
     transform: translateX(-50%) scale(0.3);
     opacity: 0;
     text-align: center;
     width: 96%;
-
-    /* 固定高度：每个祝福单元都一样高，行间距就固定了 */
     height: 620px;
-    /* 内容超出时隐藏，防止压到相邻单元 */
     overflow: hidden;
-
     pointer-events: none;
     padding: 0; border: none; background: none; box-shadow: none;
     transition:
@@ -195,15 +215,12 @@
       filter 3s linear;
     will-change: transform, opacity, filter;
     font-family: "Ma Shan Zheng", "STKaiti", "KaiTi", "楷体", serif;
-
-    /* 内容垂直居中于这个固定高度内 */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
 
-  /* 名字：8em */
   .blessing .name {
     font-family: inherit;
     font-size: 8em;
@@ -216,11 +233,9 @@
     transition: color 3s linear;
     display: block;
     width: 100%;
-    /* 名字区域固定高度，保证不同字数名字占同样高度 */
     flex-shrink: 0;
   }
 
-  /* 祝福语：6.5em */
   .blessing .msg {
     font-family: inherit;
     font-size: 6.5em;
@@ -233,23 +248,34 @@
     display: block;
     width: 100%;
     margin: 0;
-    /* 祝福语区域固定高度 */
     flex-shrink: 0;
   }
 
   .blessing.rising { animation: floatUp 8s linear forwards; }
 
-  /* 到中央：放大到 1.35 倍 */
   .blessing.center {
     transform: translateX(-50%) scale(1.35);
   }
 
-  /* 关键：起点和终点都按固定高度计算，保证每一轮间距一致 */
   @keyframes floatUp {
     0%   { bottom: -620px; opacity: 0; transform: translateX(-50%) scale(0.3); }
     12%  { opacity: 1; }
     88%  { opacity: 1; }
     100% { bottom: 115%; opacity: 0; transform: translateX(-50%) scale(0.3); }
+  }
+
+  /* ===== F11 全屏 / 小高度屏幕的额外保护 ===== */
+  @media (max-height: 760px) {
+    #title { padding: 4px 10px 2px; }
+    #title .line1 { font-size: 1.8em; letter-spacing: 12px; }
+    #title .line2 { font-size: 3.4em; letter-spacing: 16px; }
+    #main { padding: 0 18px 12px; }
+  }
+  @media (max-height: 620px) {
+    #title { padding: 2px 10px 2px; }
+    #title .line1 { font-size: 1.4em; letter-spacing: 10px; }
+    #title .line2 { font-size: 2.6em; letter-spacing: 12px; }
+    #main { padding: 0 14px 8px; gap: 14px; }
   }
 </style>
 </head>
