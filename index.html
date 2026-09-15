@@ -186,36 +186,35 @@
       opacity 0.5s ease,
       filter 3s linear;
     will-change: transform, opacity, filter;
-    /* 统一使用手写字体 */
     font-family: "Ma Shan Zheng", "STKaiti", "KaiTi", "楷体", serif;
   }
 
-  /* 名字：5em，不加粗（温馨） */
+  /* 名字：增大到 6.2em */
   .blessing .name {
     font-family: inherit;
-    font-size: 5em;
+    font-size: 6.2em;
     color: #a8843f;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     font-weight: normal;
-    letter-spacing: 4px;
-    text-shadow: 0 0 8px rgba(255,230,160,0.5), 0 2px 4px rgba(139,107,46,0.25);
+    letter-spacing: 5px;
+    text-shadow: 0 0 10px rgba(255,230,160,0.6), 0 2px 6px rgba(139,107,46,0.3);
     transition: color 3s linear;
   }
-  /* 祝福语：4em，不加粗（温馨） */
+  /* 祝福语：增大到 5.2em */
   .blessing .msg {
     font-family: inherit;
-    font-size: 4em;
+    font-size: 5.2em;
     font-weight: normal;
     color: #5c4a2a;
     line-height: 1.5;
     word-break: break-word;
-    text-shadow: 0 0 6px rgba(255,245,210,0.4), 0 1px 3px rgba(139,107,46,0.2);
+    text-shadow: 0 0 8px rgba(255,245,210,0.5), 0 2px 5px rgba(139,107,46,0.25);
     transition: color 3s linear;
   }
 
   .blessing.rising { animation: floatUp 8s linear forwards; }
 
-  /* 到中央：只变大，不发光 */
+  /* 到中央：放大到 1.4 倍，不发光 */
   .blessing.center {
     transform: translateX(-50%) scale(1.4);
   }
