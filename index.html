@@ -204,8 +204,8 @@
     transform: translateX(-50%) scale(0.3);
     opacity: 0;
     text-align: center;
-    width: 96%;
-    height: 1000px;
+    width: 320%;
+    height: auto;
     overflow: hidden;
     pointer-events: none;
     padding: 0; border: none; background: none; box-shadow: none;
@@ -258,10 +258,10 @@
   }
 
   @keyframes floatUp {
-    0%   { bottom: -620px; opacity: 0; transform: translateX(-50%) scale(0.3); }
+    0%   { bottom: 0%; opacity: 0; transform: translate(-50%, 65%) scale(0.3); }
     12%  { opacity: 1; }
     88%  { opacity: 1; }
-    100% { bottom: 115%; opacity: 0; transform: translateX(-50%) scale(0.3); }
+    100% { bottom: 100%; opacity: 0; transform: translate(-50%, 35%) scale(0.3); }
   }
 
   /* ===== F11 全屏 / 小高度屏幕的额外保护 ===== */
@@ -314,7 +314,7 @@
   const API_URL = "https://script.google.com/macros/s/AKfycbyB8qh5Yrem1ZsaT8VogIlLUHsaZSjkjOu18tCqGuztY45uIlAPJUmPmtfDEtytbjW7WQ/exec";
   const REFRESH_EVERY = 5;
 
-  const INTERVAL = 3000;
+  const INTERVAL = 6000;
   const ANIM_DURATION = 8000;
   const CENTER_START = 2800;
   const CENTER_HOLD  = 3000;
